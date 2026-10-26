@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+backend/venv/
+venv/
+.venv/
+env/
+
+# Production build outputs
+dist/
+build/
+
+# Python & Caching
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+backend/.pytest_cache/
+
+# Databases & Runtime Logs
+*.db
+*.sqlite3
+*.log
+nsv_sentinel.db
+backend/nsv_sentinel.db
+test_sentinel.db
+backend/test_sentinel.db
+
+# OS & Environment
+.DS_Store
+Thumbs.db
+
+# Secrets & Environment variables
+.env
+.env.*
+backend/.env
+backend/.env.*
+!.env.example
+!backend/.env.example

@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+body {
+  @apply bg-base text-ink font-body antialiased;
+  background-color: #F9FAFB;
+  color: #111827;
+}
+
+::selection { background: rgba(226,74,74,0.15); color: #E24A4A; }
+
+/* scrollbars */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #F3F4F6; }
+::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+
+.nsv-panel {
+  @apply bg-white border border-panel-border rounded-xl shadow-panel;
+}
+
+.nsv-panel-alt {
+  @apply bg-panel-alt border border-panel-border rounded-xl;
+}
+
+.data-num {
+  @apply font-mono tabular-nums;
+}
+
+.focus-ring {
+  @apply outline-none focus-visible:ring-2 focus-visible:ring-zerodha-red/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 currentColor; }
+  50% { opacity: .55; }
+}
+.pulse-dot { animation: pulse-dot 2.2s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-dot { animation: none; }
+  * { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
+}
