@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Query
 from typing import List, Dict, Any
 
-from app.core.security import get_current_user
+from app.core.security import get_current_user, get_optional_user
 from app.schemas.market import StockSummary, MarketDataSeriesResponse
 from app.schemas.fundamental import CompanyFundamentalSchema
 from app.services.market_service import get_stocks_list, get_stock_by_symbol, get_stock_series
@@ -18,7 +18,7 @@ def get_market_status():
     return get_market_session_status()
 
 @router.get("/live-feed/dhan")
-def get_dhan_live_status(current_user: dict = Depends(get_current_user)) -> Dict[str, Any]:
+def get_dhan_live_status(current_user: dict = Depends(get_optional_user)) -> Dict[str, Any]:
     """Returns real-time Dhan HQ API connection health and streaming quotes."""
     live_quotes = dhan_provider.fetch_all_live_ltp()
     return {
@@ -31,12 +31,12 @@ def get_dhan_live_status(current_user: dict = Depends(get_current_user)) -> Dict
     }
 
 @router.get("/stocks", response_model=List[StockSummary])
-def list_stocks(current_user: dict = Depends(get_current_user)):
+def list_stocks(current_user: dict = Depends(get_optional_user)):
     """Returns list of monitored stock universe with latest quotes."""
     return get_stocks_list()
 
 @router.get("/{symbol}", response_model=StockSummary)
-def get_stock(symbol: str, current_user: dict = Depends(get_current_user)):
+def get_stock(symbol: str, current_user: dict = Depends(get_optional_user)):
     """Returns quote metrics for a specific symbol."""
     valid_symbol = validate_symbol(symbol)
     return get_stock_by_symbol(valid_symbol)
@@ -45,7 +45,7 @@ def get_stock(symbol: str, current_user: dict = Depends(get_current_user)):
 def get_stock_history(
     symbol: str,
     range: str = Query("1D", description="Time period range (1D, 1W, 1M, 3M, 1Y)"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_optional_user)
 ):
     """Returns validated OHLCV time series data for technical analysis charts."""
     valid_symbol = validate_symbol(symbol)

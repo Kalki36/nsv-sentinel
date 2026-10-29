@@ -235,7 +235,16 @@ Academic Prototype — Team Nikhil · Samyak · Vrind
     clean_user = settings.SMTP_USER.strip() if settings.SMTP_USER else ""
     clean_password = settings.SMTP_PASSWORD.replace(" ", "").strip() if settings.SMTP_PASSWORD else ""
 
-    sender_email = settings.SMTP_FROM_EMAIL or clean_user or "security@nsv-sentinel.com"
+    # Sender email determination based on provider
+    if "gmail.com" in (settings.SMTP_HOST or "").lower() and "@" in clean_user:
+        sender_email = clean_user
+    elif settings.SMTP_FROM_EMAIL:
+        sender_email = settings.SMTP_FROM_EMAIL
+    elif "@" in clean_user:
+        sender_email = clean_user
+    else:
+        sender_email = "security@nsv-sentinel.com"
+
     sender_display = f"{settings.SMTP_FROM_NAME} <{sender_email}>"
 
     msg = MIMEMultipart("alternative")

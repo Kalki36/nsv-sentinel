@@ -151,14 +151,14 @@ class DhanMarketDataProvider:
                     data = res.json()
                     raw_data = data.get("data", {})
                     
-                    id_to_symbol = {m["security_id"]: sym for sym, m in DHAN_SECURITY_MAP.items()}
+                    id_to_symbol = {(m["segment"], m["security_id"]): sym for sym, m in DHAN_SECURITY_MAP.items()}
                     
                     for seg, sec_dict in raw_data.items():
                         if isinstance(sec_dict, dict):
                             for sec_id_str, quote in sec_dict.items():
                                 try:
                                     sec_id = int(sec_id_str)
-                                    sym = id_to_symbol.get(sec_id)
+                                    sym = id_to_symbol.get((seg, sec_id))
                                     if sym and isinstance(quote, dict):
                                         last_price = float(quote.get("last_price", 0.0))
                                         ohlc_dict = quote.get("ohlc", {})

@@ -136,6 +136,27 @@ def get_current_user(
         "role": role
     }
 
+def get_optional_user(
+    auth: Optional[HTTPAuthorizationCredentials] = Depends(security_scheme),
+) -> Optional[dict]:
+    """FastAPI dependency allowing optional authentication."""
+    if not auth or not auth.credentials:
+        return None
+    try:
+        payload = decode_access_token(auth.credentials)
+        user_id = payload.get("sub")
+        email = payload.get("email")
+        role = payload.get("role", "VIEWER")
+        if not user_id or not email:
+            return None
+        return {
+            "id": int(user_id) if str(user_id).isdigit() else user_id,
+            "email": email,
+            "role": role
+        }
+    except Exception:
+        return None
+
 def require_role(allowed_roles: list[str]):
     """Role-based authorization dependency factory."""
     def role_checker(current_user: dict = Depends(get_current_user)):
