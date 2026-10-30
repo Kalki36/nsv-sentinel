@@ -148,9 +148,26 @@ export default function ForgotPassword() {
                 Please check your inbox at <strong className="text-ink font-mono">{email}</strong> (and your Spam folder). Click the link in the email or enter your 6-digit PIN to set a new password.
               </p>
 
+              {devCode && (
+                <div className="p-3 rounded-lg bg-panel-alt border border-panel-border space-y-1.5 text-center">
+                  <p className="text-[11px] text-ink-muted">Immediate Security Code (Local Testing):</p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard?.writeText(devCode);
+                      navigate(`/reset-password?email=${encodeURIComponent(email)}&token=${devCode}&firebase=true`);
+                    }}
+                    className="inline-flex items-center gap-2 font-mono text-lg font-bold text-signal-ai bg-base px-3 py-1.5 rounded border border-signal-ai/30 hover:bg-signal-ai/10 transition cursor-pointer"
+                  >
+                    <span>{devCode}</span>
+                    <span className="text-[11px] font-sans font-normal text-ink-muted">(Click to Auto-fill)</span>
+                  </button>
+                </div>
+              )}
+
               <button
                 type="button"
-                onClick={() => navigate(`/reset-password?email=${encodeURIComponent(email)}&firebase=true`)}
+                onClick={() => navigate(`/reset-password?email=${encodeURIComponent(email)}&token=${devCode || ""}&firebase=true`)}
                 className="focus-ring w-full rounded-lg bg-signal-ai text-white font-medium py-2.5 text-sm hover:brightness-110 transition shadow-sm text-center block"
               >
                 Enter Firebase Reset PIN or Code
@@ -175,7 +192,7 @@ export default function ForgotPassword() {
             </div>
           )}
 
-          {/* Collapsible Google App Password Help */}
+          {/* Collapsible Firebase & Email Delivery Help */}
           <div className="pt-2 border-t border-panel-border">
             <button
               type="button"
@@ -184,19 +201,28 @@ export default function ForgotPassword() {
             >
               <span className="flex items-center gap-1">
                 <HelpCircle className="h-3 w-3" />
-                Live email delivery setup
+                Live Firebase & Email Delivery Setup
               </span>
               {showHelp ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
             </button>
 
             {showHelp && (
-              <div className="mt-2 p-2.5 rounded-lg bg-panel-alt border border-panel-border text-[11px] text-ink-muted space-y-1.5 leading-relaxed">
-                <p className="font-semibold text-ink">Gmail App Password Instructions:</p>
-                <ol className="list-decimal pl-4 space-y-1">
-                  <li>Turn on <strong>2-Step Verification</strong> at <a href="https://myaccount.google.com/security" target="_blank" rel="noreferrer" className="text-signal-ai underline">Google Security</a>.</li>
-                  <li>Generate a 16-character App Password at <a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noreferrer" className="text-signal-ai underline">Google App Passwords</a>.</li>
-                  <li>Paste the 16 characters in <code className="bg-base px-1 py-0.5 rounded text-signal-ai font-mono">backend/.env</code> under <code className="text-ink font-mono">SMTP_PASSWORD</code>.</li>
-                </ol>
+              <div className="mt-2 p-3 rounded-lg bg-panel-alt border border-panel-border text-[11px] text-ink-muted space-y-2.5 leading-relaxed">
+                <div>
+                  <p className="font-semibold text-ink">Option 1: Instant 1-Click Verification (Zero Setup)</p>
+                  <p className="mt-0.5">Click the white <strong>&quot;Verify with Google to Reset Password&quot;</strong> button above. It verifies your Gmail identity directly via OAuth and skips the PIN entirely.</p>
+                </div>
+
+                <div className="pt-2 border-t border-panel-border">
+                  <p className="font-semibold text-ink">Option 2: Live Firebase Email Setup (Free)</p>
+                  <ol className="list-decimal pl-4 space-y-1 mt-1">
+                    <li>Create a free project at <a href="https://console.firebase.google.com" target="_blank" rel="noreferrer" className="text-signal-ai underline">console.firebase.google.com</a>.</li>
+                    <li>Under <strong>Build &gt; Authentication</strong>, enable <strong>Email/Password</strong>.</li>
+                    <li>In Project Settings, add a Web App (<code className="text-signal-ai">&lt;/&gt;</code>) and copy the config.</li>
+                    <li>Paste the values into root <code className="bg-base px-1 py-0.5 rounded text-signal-ai font-mono">.env</code> under <code className="text-ink font-mono">VITE_FIREBASE_API_KEY</code>, etc.</li>
+                  </ol>
+                  <p className="mt-1 text-[10px] text-ink-faint">Google Firebase will then send real password reset emails directly without needing any personal password in code.</p>
+                </div>
               </div>
             )}
           </div>
