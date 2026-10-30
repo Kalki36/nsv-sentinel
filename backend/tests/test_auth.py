@@ -227,3 +227,39 @@ def test_oauth_verify_otp(client):
     data = res.json()
     assert "access_token" in data
     assert data["user"]["email"] == "analyst@nsv-sentinel.edu"
+
+def test_firebase_register_and_reset_password(client):
+    """Verifies Firebase OTP registration and Firebase password reset."""
+    firebase_user_email = "firebase_user_test@nsv-sentinel.edu"
+    firebase_pw = "FirebaseSecurePass#2026"
+
+    # Step 1: Register with Firebase verification
+    res_reg = client.post("/api/v1/auth/register/firebase", json={
+        "email": firebase_user_email,
+        "full_name": "Firebase Verified Analyst",
+        "password": firebase_pw,
+        "firebase_token": "mock_firebase_id_token_test_123"
+    })
+    assert res_reg.status_code == 200
+    reg_data = res_reg.json()
+    assert "access_token" in reg_data
+    assert reg_data["user"]["email"] == firebase_user_email
+
+    # Step 2: Reset password with Firebase
+    new_fb_pw = "NewFirebasePass#9999"
+    res_reset = client.post("/api/v1/auth/reset-password/firebase", json={
+        "email": firebase_user_email,
+        "new_password": new_fb_pw,
+        "firebase_token": "mock_firebase_reset_token_test_456"
+    })
+    assert res_reset.status_code == 200
+    assert "access_token" in res_reset.json()
+
+    # Step 3: Login with the updated password
+    res_login = client.post("/api/v1/auth/login", json={
+        "email": firebase_user_email,
+        "password": new_fb_pw,
+        "skip_otp": True
+    })
+    assert res_login.status_code == 200
+    assert res_login.json()["user"]["email"] == firebase_user_email

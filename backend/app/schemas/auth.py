@@ -76,6 +76,20 @@ class OAuthVerifyOtpRequest(BaseModel):
     credential: Optional[str] = Field(None, description="Google ID Token JWT")
     google_id: Optional[str] = Field(None, description="Google unique subject ID")
 
+class FirebaseRegisterRequest(BaseModel):
+    email: EmailStr = Field(..., description="User email address")
+    full_name: str = Field(..., min_length=2, max_length=100)
+    password: str = Field(..., min_length=8, description="Strong user password")
+    firebase_token: Optional[str] = Field(None, description="Firebase Auth ID token or verification token")
+    otp: Optional[str] = Field(None, description="6-digit OTP verified via Firebase")
+    role: Optional[UserRole] = UserRole.ANALYST
+
+class FirebaseResetPasswordRequest(BaseModel):
+    email: EmailStr = Field(..., description="Registered email address")
+    new_password: str = Field(..., min_length=8, description="New secure password (min 8 chars)")
+    firebase_token: Optional[str] = Field(None, description="Firebase Auth ID token or verification code")
+    otp: Optional[str] = Field(None, description="6-digit OTP code")
+
 class OtpActionResponse(BaseModel):
     status: str
     message: str

@@ -18,7 +18,8 @@ import {
   EyeOff
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { requestRegisterOtp, verifyRegisterOtp, googleAuthRequest, oauthVerifyOtpRequest } from "../services/api";
+import { requestRegisterOtp, verifyRegisterOtp, googleAuthRequest, oauthVerifyOtpRequest, firebaseRegisterRequest } from "../services/api";
+import { sendFirebaseRegistrationOtp, verifyFirebaseRegistrationOtp } from "../services/firebase";
 import GoogleOAuthModal from "../components/GoogleOAuthModal";
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -106,7 +107,7 @@ export default function Register() {
     }
   }
 
-  // Step 1: Submit Registration Form
+  // Step 1: Submit Registration Form via Firebase OTP
   async function handleRegisterSubmit(e) {
     e.preventDefault();
     setError("");
@@ -129,26 +130,25 @@ export default function Register() {
     }
 
     setLoading(true);
+    // Dispatch Firebase Registration OTP
+    const fbRes = await sendFirebaseRegistrationOtp(email.trim().toLowerCase(), fullName.trim(), password);
+    // Also notify backend pending registration
     const res = await requestRegisterOtp(email.trim().toLowerCase(), password, fullName.trim(), role);
     setLoading(false);
 
-    if (res.ok) {
-      if (res.otpRequired) {
-        setMaskedEmail(res.maskedEmail || email);
-        setDevOtp(res.devOtp || null);
-        setEmailSent(Boolean(res.emailSent));
-        setStep(2);
-        setCountdown(60);
-      } else {
-        login(res.token, res.user);
-        navigate("/overview");
-      }
+    if (fbRes.ok || res.ok) {
+      setMaskedEmail(res.maskedEmail || email);
+      setDevOtp(fbRes.devOtp || res.devOtp || null);
+      setEmailSent(Boolean(res.emailSent || fbRes.ok));
+      setInfoMessage(fbRes.message || "Firebase 6-digit verification code generated.");
+      setStep(2);
+      setCountdown(60);
     } else {
-      setError(res.error || "Registration failed. An account with this email may already exist.");
+      setError(res.error || fbRes.error || "Registration failed. An account with this email may already exist.");
     }
   }
 
-  // Step 2: Submit 2FA OTP
+  // Step 2: Submit Firebase 2FA OTP
   async function handleOtpSubmit(e) {
     e.preventDefault();
     setError("");
@@ -160,30 +160,47 @@ export default function Register() {
     }
 
     setLoading(true);
-    const res = await verifyRegisterOtp(email.trim().toLowerCase(), cleanOtp);
+    // 1. Verify OTP with Firebase
+    const fbVerify = await verifyFirebaseRegistrationOtp(email.trim().toLowerCase(), cleanOtp);
+
+    // 2. Register user in database with Argon2id password hash
+    let res;
+    if (fbVerify.ok) {
+      res = await firebaseRegisterRequest(
+        email.trim().toLowerCase(),
+        fullName.trim(),
+        password,
+        cleanOtp,
+        fbVerify.firebaseToken
+      );
+    } else {
+      // Fallback to backend registration verification
+      res = await verifyRegisterOtp(email.trim().toLowerCase(), cleanOtp);
+    }
     setLoading(false);
 
     if (res.ok) {
       login(res.token, res.user);
       navigate("/overview");
     } else {
-      setError(res.error || "Invalid verification code. Please check your email or request a new code.");
+      setError(res.error || fbVerify.error || "Invalid verification code. Please check your email or request a new code.");
     }
   }
 
-  // Resend OTP
+  // Resend OTP via Firebase
   async function handleResendOtp() {
     if (countdown > 0 || resending) return;
     setError("");
     setResending(true);
 
+    const fbRes = await sendFirebaseRegistrationOtp(email.trim().toLowerCase(), fullName.trim(), password);
     const res = await requestRegisterOtp(email.trim().toLowerCase(), password, fullName.trim(), role);
     setResending(false);
 
-    if (res.ok) {
+    if (fbRes.ok || res.ok) {
       setCountdown(60);
-      setDevOtp(res.devOtp || null);
-      setEmailSent(Boolean(res.emailSent));
+      setDevOtp(fbRes.devOtp || res.devOtp || null);
+      setEmailSent(true);
     } else {
       setError(res.error || "Unable to resend verification code. Please try again shortly.");
     }
@@ -399,9 +416,9 @@ export default function Register() {
             <div className="flex items-start gap-2.5 p-3 rounded-lg bg-signal-buy/10 border border-signal-buy/30 text-xs text-signal-buy">
               <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" />
               <div>
-                <p className="font-semibold">Verification Code Dispatched</p>
+                <p className="font-semibold">Firebase OTP Verification Dispatched</p>
                 <p className="text-[11px] text-ink-muted mt-0.5 leading-relaxed">
-                  A 6-digit authentication code was sent to <strong className="text-ink">{email}</strong>. Please check your Gmail inbox and Spam/Junk folder.
+                  A 6-digit authentication code was sent to <strong className="text-ink">{email}</strong> via Firebase Authentication.
                 </p>
               </div>
             </div>

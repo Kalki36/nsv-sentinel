@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { KeyRound, Mail, ArrowLeft, Loader2, CheckCircle2, AlertCircle, HelpCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { forgotPasswordRequest } from "../services/api";
+import { sendFirebasePasswordReset } from "../services/firebase";
 import GoogleOAuthModal from "../components/GoogleOAuthModal";
 
 export default function ForgotPassword() {
@@ -31,16 +32,18 @@ export default function ForgotPassword() {
     }
 
     setLoading(true);
+    // Send password reset OTP / verification via Firebase Authentication
+    const fbRes = await sendFirebasePasswordReset(email.trim().toLowerCase());
     const res = await forgotPasswordRequest(email.trim().toLowerCase());
     setLoading(false);
 
-    if (res.ok) {
+    if (fbRes.ok || res.ok) {
       setSubmitted(true);
-      setInfo(res.message || "Password reset instructions have been sent to your email.");
-      setDevLink(res.devLink || null);
-      setDevCode(res.devCode || null);
+      setInfo(fbRes.message || res.message || "Password reset instructions have been sent via Firebase.");
+      setDevLink(res.devLink || `/reset-password?email=${encodeURIComponent(email)}&firebase=true`);
+      setDevCode(fbRes.devCode || res.devCode || null);
     } else {
-      setError(res.error || "Unable to send password reset instructions. Please try again.");
+      setError(fbRes.error || res.error || "Unable to send password reset instructions. Please try again.");
     }
   }
 
@@ -147,10 +150,10 @@ export default function ForgotPassword() {
 
               <button
                 type="button"
-                onClick={() => navigate(`/reset-password?email=${encodeURIComponent(email)}`)}
+                onClick={() => navigate(`/reset-password?email=${encodeURIComponent(email)}&firebase=true`)}
                 className="focus-ring w-full rounded-lg bg-signal-ai text-white font-medium py-2.5 text-sm hover:brightness-110 transition shadow-sm text-center block"
               >
-                Enter Reset PIN or Code
+                Enter Firebase Reset PIN or Code
               </button>
 
               <div className="pt-2 border-t border-panel-border flex items-center justify-between text-xs">

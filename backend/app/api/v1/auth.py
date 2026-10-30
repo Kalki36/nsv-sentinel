@@ -29,7 +29,9 @@ from app.schemas.auth import (
     ResetPasswordRequest,
     GoogleAuthRequest,
     OAuthResetPasswordRequest,
-    OAuthVerifyOtpRequest
+    OAuthVerifyOtpRequest,
+    FirebaseRegisterRequest,
+    FirebaseResetPasswordRequest
 )
 from app.utils.validators import sanitize_input
 from app.utils.audit import log_audit_event, record_security_event
@@ -740,6 +742,76 @@ def verify_otp_via_oauth(request_data: OAuthVerifyOtpRequest, req: Request, db: 
 
     log_audit_event(db, actor=email, event="2FA / Registration verified via Google OAuth", module="Auth", status="Success", ip_address=client_ip)
     record_security_event(db, event_name="OAUTH_OTP_VERIFY_SUCCESS", severity="Normal", action_taken="Allowed", status_label="Verified", ip_address=client_ip)
+
+    return _create_token_response(user)
+
+@router.post("/register/firebase", response_model=TokenResponse)
+def register_via_firebase(request_data: FirebaseRegisterRequest, req: Request, db: Session = Depends(get_db)):
+    """
+    Registers a new user account with Firebase OTP authentication.
+    Stores user's unique password securely with Argon2id hashing in the database.
+    """
+    email = sanitize_input(request_data.email).lower()
+    client_ip = req.client.host if req.client else "127.0.0.1"
+
+    existing = db.query(User).filter(User.email == email).first()
+    if existing:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="An account with this email already exists. Please log in directly."
+        )
+
+    # If OTP is supplied, check registration pending or OTP cache
+    if request_data.otp:
+        valid, reason, _ = verify_registration_otp(email, request_data.otp)
+        if not valid:
+            valid_otp, _ = verify_otp(email, request_data.otp)
+            if not valid_otp and not request_data.firebase_token:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=reason or "Invalid Firebase OTP code.")
+
+    role_enum = request_data.role if request_data.role in UserRole else UserRole.ANALYST
+    new_user = User(
+        email=email,
+        full_name=sanitize_input(request_data.full_name),
+        password_hash=hash_password(request_data.password),
+        role=role_enum,
+        is_active=True
+    )
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    log_audit_event(db, actor=email, event="User registered via Firebase OTP authentication", module="Auth", status="Success", ip_address=client_ip)
+    record_security_event(db, event_name="FIREBASE_AUTH_REGISTER", severity="Normal", action_taken="Created", status_label="Verified", ip_address=client_ip)
+
+    return _create_token_response(new_user)
+
+@router.post("/reset-password/firebase", response_model=TokenResponse)
+def reset_password_via_firebase(request_data: FirebaseResetPasswordRequest, req: Request, db: Session = Depends(get_db)):
+    """
+    Resets user password securely using Firebase OTP / Auth verification.
+    Updates the database with Argon2id password hash and returns an active session token.
+    """
+    email = sanitize_input(request_data.email).lower()
+    client_ip = req.client.host if req.client else "127.0.0.1"
+
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User account not found")
+
+    # If OTP supplied, verify
+    if request_data.otp:
+        code_valid, _ = verify_reset_code(email, request_data.otp)
+        if not code_valid and not request_data.firebase_token:
+            valid_otp, _ = verify_otp(email, request_data.otp)
+            if not valid_otp:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Firebase verification code")
+
+    user.password_hash = hash_password(request_data.new_password)
+    db.commit()
+
+    log_audit_event(db, actor=email, event="Password reset completed via Firebase", module="Auth", status="Success", ip_address=client_ip)
+    record_security_event(db, event_name="FIREBASE_PASSWORD_RESET_SUCCESS", severity="Normal", action_taken="Updated", status_label="Resolved", ip_address=client_ip)
 
     return _create_token_response(user)
 

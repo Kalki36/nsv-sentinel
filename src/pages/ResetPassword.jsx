@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { KeyRound, Lock, Mail, ArrowLeft, Loader2, CheckCircle2, AlertCircle, ShieldCheck, Eye, EyeOff } from "lucide-react";
-import { resetPasswordRequest, oauthResetPasswordRequest } from "../services/api";
+import { resetPasswordRequest, oauthResetPasswordRequest, firebaseResetPasswordRequest } from "../services/api";
+import { verifyFirebaseResetCode } from "../services/firebase";
 import GoogleOAuthModal from "../components/GoogleOAuthModal";
 
 export default function ResetPassword() {
@@ -16,6 +17,7 @@ export default function ResetPassword() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [isOAuthVerified, setIsOAuthVerified] = useState(false);
+  const [isFirebase, setIsFirebase] = useState(false);
   const [googleAccount, setGoogleAccount] = useState(null);
   const [showGoogleModal, setShowGoogleModal] = useState(false);
 
@@ -27,11 +29,15 @@ export default function ResetPassword() {
     const qEmail = searchParams.get("email");
     const qToken = searchParams.get("token");
     const qOAuth = searchParams.get("oauth");
+    const qFirebase = searchParams.get("firebase");
 
     if (qEmail) setEmail(qEmail);
     if (qToken) setTokenOrCode(qToken);
     if (qOAuth === "true") {
       setIsOAuthVerified(true);
+    }
+    if (qFirebase === "true") {
+      setIsFirebase(true);
     }
   }, [searchParams]);
 
@@ -89,6 +95,17 @@ export default function ResetPassword() {
         googleAccount?.googleId,
         googleAccount?.credential
       );
+    } else if (isFirebase) {
+      const fbVerify = await verifyFirebaseResetCode(email.trim().toLowerCase(), tokenOrCode.trim());
+      res = await firebaseResetPasswordRequest(
+        email.trim().toLowerCase(),
+        newPassword,
+        tokenOrCode.trim(),
+        fbVerify.token || null
+      );
+      if (!res.ok) {
+        res = await resetPasswordRequest(email.trim().toLowerCase(), tokenOrCode.trim(), newPassword);
+      }
     } else {
       res = await resetPasswordRequest(email.trim().toLowerCase(), tokenOrCode.trim(), newPassword);
     }
@@ -124,6 +141,16 @@ export default function ResetPassword() {
                     <p className="font-semibold text-signal-buy">Google Identity Verified</p>
                     <p className="text-ink-muted mt-0.5 break-all">
                       Authenticated as <strong className="text-ink font-mono">{email}</strong>. 6-digit PIN bypassed.
+                    </p>
+                  </div>
+                </div>
+              ) : isFirebase ? (
+                <div className="p-3 rounded-lg bg-signal-ai/10 border border-signal-ai/30 flex items-start gap-2.5">
+                  <CheckCircle2 className="h-4 w-4 text-signal-ai shrink-0 mt-0.5" />
+                  <div className="text-xs">
+                    <p className="font-semibold text-signal-ai">Firebase Authentication Active</p>
+                    <p className="text-ink-muted mt-0.5 leading-relaxed">
+                      Password reset PIN dispatched via Google Firebase. Enter your 6-digit verification code below.
                     </p>
                   </div>
                 </div>

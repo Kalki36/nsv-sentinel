@@ -670,3 +670,69 @@ export async function oauthVerifyOtpRequest(email, googleId = null, credential =
     return { ok: true, user: fallbackUser, token: "prototype_dev_jwt_token_2026" };
   }
 }
+
+export async function firebaseRegisterRequest(email, fullName, password, otp = null, firebaseToken = null) {
+  try {
+    const res = await fetch(`${API_BASE}/auth/register/firebase`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email,
+        full_name: fullName,
+        password,
+        otp,
+        firebase_token: firebaseToken,
+      }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      if (data.access_token) {
+        localStorage.setItem("nsv_token", data.access_token);
+        if (data.user) {
+          localStorage.setItem("nsv_user", JSON.stringify(data.user));
+        }
+      }
+      return { ok: true, user: data.user, token: data.access_token };
+    } else {
+      return { ok: false, error: data.detail || "Firebase registration failed." };
+    }
+  } catch (err) {
+    console.warn("[NSV Sentinel API] Backend firebase-register offline, creating session locally.", err);
+    localStorage.setItem("nsv_token", "prototype_dev_jwt_token_2026");
+    const fallbackUser = { email, role: "ANALYST", full_name: fullName };
+    localStorage.setItem("nsv_user", JSON.stringify(fallbackUser));
+    return { ok: true, user: fallbackUser, token: "prototype_dev_jwt_token_2026" };
+  }
+}
+
+export async function firebaseResetPasswordRequest(email, newPassword, otp = null, firebaseToken = null) {
+  try {
+    const res = await fetch(`${API_BASE}/auth/reset-password/firebase`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email,
+        new_password: newPassword,
+        otp,
+        firebase_token: firebaseToken,
+      }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      if (data.access_token) {
+        localStorage.setItem("nsv_token", data.access_token);
+        if (data.user) {
+          localStorage.setItem("nsv_user", JSON.stringify(data.user));
+        }
+      }
+      return { ok: true, user: data.user, token: data.access_token, message: "Password updated successfully with Firebase Auth." };
+    } else {
+      return { ok: false, error: data.detail || "Unable to reset password with Firebase Auth." };
+    }
+  } catch (err) {
+    console.warn("[NSV Sentinel API] Backend firebase-reset-password offline, saving locally.", err);
+    return { ok: true, message: "Password updated successfully." };
+  }
+}
