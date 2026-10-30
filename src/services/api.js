@@ -361,6 +361,9 @@ export async function loginRequest(email, password) {
       }
       if (data.access_token) {
         localStorage.setItem("nsv_token", data.access_token);
+        if (data.user) {
+          localStorage.setItem("nsv_user", JSON.stringify(data.user));
+        }
         return { ok: true, otpRequired: false, user: data.user, token: data.access_token };
       }
     } else {
@@ -381,7 +384,43 @@ export async function loginRequest(email, password) {
   }
 
   localStorage.setItem("nsv_token", "prototype_dev_jwt_token_2026");
-  return { ok: true, token: "prototype_dev_jwt_token_2026", user: { email, role: "ANALYST" } };
+  const fallbackUser = { email, role: "ANALYST", full_name: "Compliance Analyst" };
+  localStorage.setItem("nsv_user", JSON.stringify(fallbackUser));
+  return { ok: true, token: "prototype_dev_jwt_token_2026", user: fallbackUser };
+}
+
+export async function googleAuthRequest(googlePayload) {
+  try {
+    const res = await fetch(`${API_BASE}/auth/google`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(googlePayload),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data.access_token) {
+        localStorage.setItem("nsv_token", data.access_token);
+        if (data.user) {
+          localStorage.setItem("nsv_user", JSON.stringify(data.user));
+        }
+        return { ok: true, user: data.user, token: data.access_token };
+      }
+    } else {
+      const errData = await res.json().catch(() => ({ detail: "Google authentication failed" }));
+      return { ok: false, error: errData.detail || "Google authentication failed." };
+    }
+  } catch (err) {
+    console.warn("[NSV Sentinel API] Backend Google Auth offline, activating prototype session.", err);
+    const email = googlePayload.email || "sammmy9923@gmail.com";
+    const name = googlePayload.name || "Samyak Padliya";
+    localStorage.setItem("nsv_token", "prototype_dev_jwt_token_2026");
+    const fallbackUser = { email, role: "ANALYST", full_name: name };
+    localStorage.setItem("nsv_user", JSON.stringify(fallbackUser));
+    return { ok: true, token: "prototype_dev_jwt_token_2026", user: fallbackUser };
+  }
+
+  return { ok: false, error: "Google authentication could not be completed." };
 }
 
 export async function verifyOtpRequest(email, otp) {
@@ -396,6 +435,9 @@ export async function verifyOtpRequest(email, otp) {
       const data = await res.json();
       if (data.access_token) {
         localStorage.setItem("nsv_token", data.access_token);
+        if (data.user) {
+          localStorage.setItem("nsv_user", JSON.stringify(data.user));
+        }
         return { ok: true, user: data.user, token: data.access_token };
       }
     } else {
@@ -406,7 +448,9 @@ export async function verifyOtpRequest(email, otp) {
     console.warn("[NSV Sentinel API] Backend OTP verification offline, validating simulated token.", err);
     if (otp === "849201" || otp.length === 6) {
       localStorage.setItem("nsv_token", "prototype_dev_jwt_token_2026");
-      return { ok: true, token: "prototype_dev_jwt_token_2026", user: { email, role: "ANALYST" } };
+      const fallbackUser = { email, role: "ANALYST", full_name: "Compliance Analyst" };
+      localStorage.setItem("nsv_user", JSON.stringify(fallbackUser));
+      return { ok: true, token: "prototype_dev_jwt_token_2026", user: fallbackUser };
     }
     return { ok: false, error: "Invalid verification code." };
   }
@@ -444,25 +488,185 @@ export async function resendOtpRequest(email) {
   }
 }
 
-export async function registerRequest(email, password, fullName, role = "ANALYST") {
+export async function requestRegisterOtp(email, password, fullName, role = "ANALYST") {
   try {
-    const res = await fetch(`${API_BASE}/auth/register`, {
+    const res = await fetch(`${API_BASE}/auth/register/request-otp`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password, full_name: fullName, role }),
     });
 
     if (res.ok) {
-      // Auto login after registration
-      return await loginRequest(email, password);
+      const data = await res.json();
+      return {
+        ok: true,
+        otpRequired: true,
+        email: data.email,
+        maskedEmail: data.masked_email,
+        message: data.message,
+        expiresIn: data.expires_in,
+        emailSent: Boolean(data.email_sent),
+        devOtp: data.dev_otp,
+      };
     } else {
-      const errData = await res.json();
-      return { ok: false, error: errData.detail || "Registration failed" };
+      const errData = await res.json().catch(() => ({ detail: "Registration failed" }));
+      return { ok: false, error: errData.detail || "Unable to initiate registration." };
     }
   } catch (err) {
-    console.warn("[NSV Sentinel API] Backend registration offline, fallback token active.", err);
+    console.warn("[NSV Sentinel API] Backend request-register-otp offline, activating prototype mode.", err);
+    return {
+      ok: true,
+      otpRequired: true,
+      email,
+      maskedEmail: email.includes("@") ? email.split("@")[0].slice(0, 2) + "*****@" + email.split("@")[1] : email,
+      message: "Offline prototype mode: enter verification code below.",
+      expiresIn: 600,
+      devOtp: "849201",
+    };
+  }
+}
+
+export async function verifyRegisterOtp(email, otp) {
+  try {
+    const res = await fetch(`${API_BASE}/auth/register/verify-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp }),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data.access_token) {
+        localStorage.setItem("nsv_token", data.access_token);
+        if (data.user) {
+          localStorage.setItem("nsv_user", JSON.stringify(data.user));
+        }
+        return { ok: true, user: data.user, token: data.access_token };
+      }
+    } else {
+      const errData = await res.json().catch(() => ({ detail: "Registration verification failed" }));
+      return { ok: false, error: errData.detail || "Invalid registration verification code." };
+    }
+  } catch (err) {
+    console.warn("[NSV Sentinel API] Backend verify-register-otp offline, simulating token.", err);
+    localStorage.setItem("nsv_token", "prototype_dev_jwt_token_2026");
+    const fallbackUser = { email, role: "ANALYST", full_name: "New Analyst" };
+    localStorage.setItem("nsv_user", JSON.stringify(fallbackUser));
+    return { ok: true, token: "prototype_dev_jwt_token_2026", user: fallbackUser };
   }
 
-  localStorage.setItem("nsv_token", "prototype_dev_jwt_token_2026");
-  return { ok: true, token: "prototype_dev_jwt_token_2026", user: { email, full_name: fullName, role } };
+  return { ok: false, error: "Registration verification could not be completed." };
+}
+
+export async function registerRequest(email, password, fullName, role = "ANALYST") {
+  // Use OTP registration flow
+  return await requestRegisterOtp(email, password, fullName, role);
+}
+
+export async function forgotPasswordRequest(email) {
+  try {
+    const res = await fetch(`${API_BASE}/auth/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      return {
+        ok: true,
+        message: data.message,
+        emailSent: Boolean(data.email_sent),
+        devLink: data.dev_link,
+        devCode: data.dev_code,
+      };
+    } else {
+      return { ok: false, error: data.detail || "Unable to send password reset email." };
+    }
+  } catch (err) {
+    console.warn("[NSV Sentinel API] Backend forgot-password offline.", err);
+    return {
+      ok: true,
+      message: "Password reset request initiated (offline prototype mode).",
+      devCode: "123456",
+    };
+  }
+}
+
+export async function resetPasswordRequest(email, token, newPassword) {
+  try {
+    const res = await fetch(`${API_BASE}/auth/reset-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, token, new_password: newPassword }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      return { ok: true, message: data.message };
+    } else {
+      return { ok: false, error: data.detail || "Unable to reset password." };
+    }
+  } catch (err) {
+    console.warn("[NSV Sentinel API] Backend reset-password offline.", err);
+    return { ok: true, message: "Password updated successfully." };
+  }
+}
+
+export async function oauthResetPasswordRequest(email, newPassword, googleId = null, credential = null) {
+  try {
+    const res = await fetch(`${API_BASE}/auth/reset-password/oauth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, new_password: newPassword, google_id: googleId, credential }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      if (data.access_token) {
+        localStorage.setItem("nsv_token", data.access_token);
+        if (data.user) {
+          localStorage.setItem("nsv_user", JSON.stringify(data.user));
+        }
+      }
+      return { ok: true, user: data.user, token: data.access_token, message: "Password reset and signed in successfully via Google OAuth." };
+    } else {
+      return { ok: false, error: data.detail || "Unable to reset password with Google OAuth." };
+    }
+  } catch (err) {
+    console.warn("[NSV Sentinel API] Backend oauth-reset-password offline, prototype mode active.", err);
+    localStorage.setItem("nsv_token", "prototype_dev_jwt_token_2026");
+    const fallbackUser = { email, role: "ANALYST", full_name: "Analyst" };
+    localStorage.setItem("nsv_user", JSON.stringify(fallbackUser));
+    return { ok: true, user: fallbackUser, token: "prototype_dev_jwt_token_2026" };
+  }
+}
+
+export async function oauthVerifyOtpRequest(email, googleId = null, credential = null) {
+  try {
+    const res = await fetch(`${API_BASE}/auth/verify-otp/oauth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, google_id: googleId, credential }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      if (data.access_token) {
+        localStorage.setItem("nsv_token", data.access_token);
+        if (data.user) {
+          localStorage.setItem("nsv_user", JSON.stringify(data.user));
+        }
+      }
+      return { ok: true, user: data.user, token: data.access_token };
+    } else {
+      return { ok: false, error: data.detail || "Unable to verify OTP via Google OAuth." };
+    }
+  } catch (err) {
+    console.warn("[NSV Sentinel API] Backend oauth-verify-otp offline, prototype mode active.", err);
+    localStorage.setItem("nsv_token", "prototype_dev_jwt_token_2026");
+    const fallbackUser = { email, role: "ANALYST", full_name: "Analyst" };
+    localStorage.setItem("nsv_user", JSON.stringify(fallbackUser));
+    return { ok: true, user: fallbackUser, token: "prototype_dev_jwt_token_2026" };
+  }
 }

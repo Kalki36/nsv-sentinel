@@ -72,6 +72,44 @@ def decode_access_token(token: str) -> dict:
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+def create_password_reset_token(email: str, expire_minutes: int = 15) -> str:
+    """Generates a signed JWT token specifically for password reset."""
+    expires_delta = timedelta(minutes=expire_minutes)
+    expire = datetime.now(timezone.utc) + expires_delta
+    to_encode = {
+        "sub": email.strip().lower(),
+        "purpose": "password_reset",
+        "exp": expire,
+        "iss": "nsv-sentinel-backend"
+    }
+    return jwt.encode(to_encode, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
+
+def decode_password_reset_token(token: str) -> str:
+    """Validates and extracts the email from a password reset JWT token."""
+    try:
+        payload = jwt.decode(
+            token,
+            settings.JWT_SECRET,
+            algorithms=[settings.JWT_ALGORITHM],
+            issuer="nsv-sentinel-backend"
+        )
+        if payload.get("purpose") != "password_reset":
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid token purpose"
+            )
+        return str(payload.get("sub"))
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password reset link has expired. Please request a new one."
+        )
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or corrupted password reset token."
+        )
+
 # ---- Application-Level Encryption (AES-256-GCM) -----------------------------
 
 def _get_aes_key() -> bytes:

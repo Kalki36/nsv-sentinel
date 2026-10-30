@@ -13,6 +13,7 @@ class RegisterRequest(BaseModel):
     full_name: str = Field(..., min_length=2, max_length=100)
     password: str = Field(..., min_length=8, description="Strong password (min 8 chars)")
     role: Optional[UserRole] = UserRole.ANALYST
+    otp: Optional[str] = Field(None, description="Optional 6-digit registration verification code")
 
 class ChangePasswordRequest(BaseModel):
     current_password: str = Field(...)
@@ -49,6 +50,31 @@ class VerifyOtpRequest(BaseModel):
 
 class ResendOtpRequest(BaseModel):
     email: str = Field(..., description="User email address")
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr = Field(..., description="Registered email address")
+
+class ResetPasswordRequest(BaseModel):
+    email: EmailStr = Field(..., description="Registered email address")
+    token: str = Field(..., description="Password reset token or 6-digit verification code")
+    new_password: str = Field(..., min_length=8, description="New secure password (min 8 chars)")
+
+class GoogleAuthRequest(BaseModel):
+    credential: Optional[str] = Field(None, description="Google ID Token JWT from Google Identity Services")
+    email: Optional[EmailStr] = Field(None, description="Google verified email address")
+    name: Optional[str] = Field(None, description="Google account display name")
+    google_id: Optional[str] = Field(None, description="Google unique subject ID")
+
+class OAuthResetPasswordRequest(BaseModel):
+    email: Optional[EmailStr] = Field(None, description="Google verified email address")
+    credential: Optional[str] = Field(None, description="Google ID Token JWT")
+    google_id: Optional[str] = Field(None, description="Google unique subject ID")
+    new_password: str = Field(..., min_length=8, description="New secure password (min 8 chars)")
+
+class OAuthVerifyOtpRequest(BaseModel):
+    email: Optional[EmailStr] = Field(None, description="Google verified email address")
+    credential: Optional[str] = Field(None, description="Google ID Token JWT")
+    google_id: Optional[str] = Field(None, description="Google unique subject ID")
 
 class OtpActionResponse(BaseModel):
     status: str

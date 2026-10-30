@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { User, Lock, Bell, Database, LayoutDashboard, CheckCircle2, AlertCircle } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const TABS = [
   { id: "profile", label: "Profile", icon: User },
@@ -48,9 +49,18 @@ export default function Settings() {
 }
 
 function ProfilePane() {
-  const [name, setName] = useState("N. Sharma");
-  const [email, setEmail] = useState("analyst@nsv-sentinel.edu");
+  const { user } = useAuth();
+  const [name, setName] = useState(user?.full_name || "Analyst User");
+  const [email, setEmail] = useState(user?.email || "analyst@nsv-sentinel.edu");
+  const [role] = useState(user?.role || "ANALYST");
   const [msg, setMsg] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      if (user.full_name) setName(user.full_name);
+      if (user.email) setEmail(user.email);
+    }
+  }, [user]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -94,8 +104,8 @@ function ProfilePane() {
         <input
           type="text"
           disabled
-          value="Compliance Analyst"
-          className="w-full rounded-lg border border-panel-border bg-panel-alt/50 px-3 py-2 text-sm text-ink-faint cursor-not-allowed"
+          value={user?.role === "ADMIN" ? "Security Administrator (ADMIN)" : user?.role === "VIEWER" ? "Security Viewer (VIEWER)" : "Compliance Analyst (ANALYST)"}
+          className="w-full rounded-lg border border-panel-border bg-panel-alt/50 px-3 py-2 text-sm text-ink font-medium cursor-not-allowed"
         />
       </div>
 

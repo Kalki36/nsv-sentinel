@@ -17,7 +17,7 @@ export default function Topbar() {
     message: "Market is CLOSED (Trading Hours: 09:15 - 15:30 IST)"
   });
   
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -133,17 +133,26 @@ export default function Topbar() {
           >
             <UserCircle2 className="h-7 w-7 text-gray-600" strokeWidth={1.5} />
             <div className="hidden lg:block text-left leading-tight">
-              <p className="text-xs font-bold text-gray-900">N. Sharma</p>
-              <p className="text-[10px] font-medium text-gray-500">Compliance Analyst</p>
+              <p className="text-xs font-bold text-gray-900">{user?.full_name || "Analyst"}</p>
+              <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">{user?.role || "ANALYST"}</p>
             </div>
             <ChevronDown className="h-3 w-3 text-gray-400" />
           </button>
 
           {showUserMenu && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 p-1.5 rounded-xl shadow-xl z-50 divide-y divide-gray-100">
+            <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 p-1.5 rounded-xl shadow-xl z-50 divide-y divide-gray-100">
               <div className="px-3 py-2 text-xs">
-                <p className="font-bold text-gray-900">N. Sharma</p>
-                <p className="text-gray-500 text-[11px]">analyst@nsv-sentinel.edu</p>
+                <p className="font-bold text-gray-900 truncate">{user?.full_name || "Analyst User"}</p>
+                <p className="text-gray-500 text-[11px] truncate">{user?.email || "analyst@nsv-sentinel.edu"}</p>
+                <div className="mt-1.5">
+                  <span className={`inline-block px-1.5 py-0.5 text-[9px] font-bold rounded uppercase ${
+                    user?.role === "ADMIN" ? "bg-red-50 text-red-700 border border-red-200" :
+                    user?.role === "VIEWER" ? "bg-gray-100 text-gray-700 border border-gray-200" :
+                    "bg-blue-50 text-blue-700 border border-blue-200"
+                  }`}>
+                    {user?.role || "ANALYST"}
+                  </span>
+                </div>
               </div>
               <div className="py-1">
                 <button
