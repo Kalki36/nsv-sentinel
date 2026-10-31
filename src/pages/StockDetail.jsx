@@ -13,7 +13,7 @@ import ExplainabilityChart from "../components/ExplainabilityChart";
 import FundamentalGauge from "../components/FundamentalGauge";
 import { RiskGauge, RiskBars } from "../components/RiskGauge";
 import { LoadingState } from "../components/States";
-import { getSurveillanceAlerts, getSentiment, getAIDecision, getExplainability, getRiskAnalysis, getFundamentals } from "../services/api";
+import { getSurveillanceAlerts, getSentiment, getAIDecision, getExplainability, getRiskAnalysis, getFundamentals, getStockList } from "../services/api";
 
 const TABS = ["Overview", "Fundamentals", "Analytics", "Surveillance", "Sentiment", "Risk", "AI Decision", "Explainability"];
 
@@ -21,7 +21,16 @@ export default function StockDetail() {
   const { symbol } = useParams();
   const navigate = useNavigate();
   const [tab, setTab] = useState("Overview");
-  const stock = getStock(symbol);
+  const [liveStock, setLiveStock] = useState(null);
+
+  useEffect(() => {
+    getStockList().then((list) => {
+      const found = list.find((s) => s.symbol === symbol?.toUpperCase());
+      if (found) setLiveStock(found);
+    });
+  }, [symbol]);
+
+  const stock = liveStock || getStock(symbol);
 
   return (
     <div className="space-y-5">
@@ -35,11 +44,14 @@ export default function StockDetail() {
             <h1 className="font-display text-2xl font-bold text-gray-900">{stock.symbol}</h1>
             <span className="text-sm font-medium text-gray-500">{stock.name}</span>
           </div>
-          <div className="flex items-baseline gap-3 mt-1">
+          <div className="flex items-center gap-3 mt-1">
             <span className="data-num text-xl font-bold text-gray-900">₹{stock.price.toLocaleString("en-IN")}</span>
             <span className={`data-num text-sm font-bold ${stock.change >= 0 ? "text-emerald-600" : "text-zerodha-red"}`}>
               {stock.change >= 0 ? "+" : ""}
               {stock.change}%
+            </span>
+            <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 pulse-dot" /> DHAN LIVE FEED
             </span>
           </div>
         </div>

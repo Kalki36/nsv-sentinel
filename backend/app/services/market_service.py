@@ -8,9 +8,9 @@ from app.services.dhan_service import dhan_provider, DHAN_SECURITY_MAP
 # Universe metadata anchor names, sectors, and baseline Dhan API prices
 STOCK_METADATA_ANCHORS = {
     # Benchmark Indices
-    "NIFTY50": {"name": "NIFTY 50 Benchmark Index", "exchange": "NSE", "sector": "Index", "base_price": 24850.40, "open": 24680.10, "high": 24890.30, "low": 24640.20, "close": 24850.40, "change": 0.85, "volume": "345.2M", "rsi": 61, "riskScore": 28},
-    "BANKNIFTY": {"name": "NIFTY BANK Index", "exchange": "NSE", "sector": "Index", "base_price": 52140.75, "open": 51800.50, "high": 52280.00, "low": 51690.00, "close": 52140.75, "change": 1.14, "volume": "189.4M", "rsi": 63, "riskScore": 32},
-    "SENSEX": {"name": "BSE SENSEX Benchmark Index", "exchange": "BSE", "sector": "Index", "base_price": 79402.30, "open": 79150.00, "high": 79540.80, "low": 79020.10, "close": 79402.30, "change": 0.42, "volume": "142.8M", "rsi": 60, "riskScore": 25},
+    "NIFTY50": {"name": "NIFTY 50 Benchmark Index", "exchange": "NSE", "sector": "Index", "base_price": 23053.10, "open": 22964.50, "high": 23118.10, "low": 22905.10, "close": 23053.10, "change": 0.39, "volume": "345.2M", "rsi": 61, "riskScore": 28},
+    "BANKNIFTY": {"name": "NIFTY BANK Index", "exchange": "NSE", "sector": "Index", "base_price": 54686.95, "open": 54907.10, "high": 55068.50, "low": 54580.75, "close": 54686.95, "change": -0.40, "volume": "189.4M", "rsi": 63, "riskScore": 32},
+    "SENSEX": {"name": "BSE SENSEX Benchmark Index", "exchange": "BSE", "sector": "Index", "base_price": 74459.53, "open": 74199.69, "high": 74742.59, "low": 74082.03, "close": 74459.53, "change": 0.35, "volume": "142.8M", "rsi": 60, "riskScore": 25},
 
     # Full NIFTY 50 Constituent Universe (NSE Equities)
     "RELIANCE": {"name": "Reliance Industries Ltd.", "exchange": "NSE", "sector": "Energy", "base_price": 1425.60, "open": 1395.00, "high": 1432.00, "low": 1390.50, "close": 1425.60, "change": 2.34, "volume": "8.2M", "rsi": 64, "riskScore": 62},

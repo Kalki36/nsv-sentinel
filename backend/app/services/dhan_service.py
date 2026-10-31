@@ -12,7 +12,7 @@ DHAN_SECURITY_MAP = {
     # Benchmark Indices (Primary Indian Market Indicators)
     "NIFTY50": {"segment": "IDX_I", "security_id": 13, "instrument": "INDEX", "name": "NIFTY 50 Benchmark Index"},
     "BANKNIFTY": {"segment": "IDX_I", "security_id": 25, "instrument": "INDEX", "name": "NIFTY BANK Index"},
-    "SENSEX": {"segment": "IDX_I", "security_id": 1, "instrument": "INDEX", "name": "BSE SENSEX Benchmark Index"},
+    "SENSEX": {"segment": "IDX_I", "security_id": 51, "instrument": "INDEX", "name": "BSE SENSEX Benchmark Index"},
 
     # Full NIFTY 50 Constituent Stock Universe (NSE Equities)
     "RELIANCE": {"segment": "NSE_EQ", "security_id": 2885, "instrument": "EQUITY", "name": "Reliance Industries Ltd."},

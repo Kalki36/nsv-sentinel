@@ -49,6 +49,15 @@ export default function Overview() {
     getStockList().then((list) => {
       if (list && list.length > 0) setUniverseList(list);
     });
+
+    // Real-time market feed polling: refreshes Dhan quotes every 10s
+    const timer = setInterval(() => {
+      getStockList().then((list) => {
+        if (list && list.length > 0) setUniverseList(list);
+      });
+    }, 10000);
+
+    return () => clearInterval(timer);
   }, []);
 
   function handleRefresh() {

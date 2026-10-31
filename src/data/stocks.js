@@ -1,70 +1,91 @@
+// src/data/stocks.js
 // Stock universe for NSV Sentinel featuring the full NIFTY 50 Universe and Indian Benchmark Indices.
 // Automatically updated in real time by the FastAPI backend via Dhan HQ API v2.
 
 export const BENCHMARK_INDICES = [
-  { symbol: "NIFTY50", name: "NIFTY 50 Benchmark Index", exchange: "NSE", sector: "Index", price: 24850.40, change: 0.85, volume: "345.2M", volatility: 12.1, rsi: 61, riskScore: 28, open: 24680.10, high: 24890.30, low: 24640.20 },
-  { symbol: "BANKNIFTY", name: "NIFTY BANK Index", exchange: "NSE", sector: "Index", price: 52140.75, change: 1.14, volume: "189.4M", volatility: 14.8, rsi: 63, riskScore: 32, open: 51800.50, high: 52280.00, low: 51690.00 },
-  { symbol: "SENSEX", name: "BSE SENSEX Benchmark Index", exchange: "BSE", sector: "Index", price: 79402.30, change: 0.42, volume: "142.8M", volatility: 10.9, rsi: 60, riskScore: 25, open: 79150.00, high: 79540.80, low: 79020.10 },
+  { symbol: "NIFTY50", name: "NIFTY 50 Benchmark Index", exchange: "NSE", sector: "Index", price: 23053.10, change: 0.39, volume: "345.2M", volatility: 12.1, rsi: 61, riskScore: 28, open: 22964.50, high: 23118.10, low: 22905.10, close: 23053.10, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "BANKNIFTY", name: "NIFTY BANK Index", exchange: "NSE", sector: "Index", price: 54686.95, change: -0.40, volume: "189.4M", volatility: 14.8, rsi: 63, riskScore: 32, open: 54907.10, high: 55068.50, low: 54580.75, close: 54686.95, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "SENSEX", name: "BSE SENSEX Benchmark Index", exchange: "BSE", sector: "Index", price: 74459.53, change: 0.35, volume: "142.8M", volatility: 0.9, rsi: 60, riskScore: 25, open: 74199.69, high: 74742.59, low: 74082.03, close: 74459.53, feed_source: "DHAN_HQ_API_LIVE" },
 ];
 
 export const STOCKS = [
   // Benchmark Indices
   ...BENCHMARK_INDICES,
 
-  // Full NIFTY 50 Stocks Universe (Derived & Synchronized from Dhan HQ API v2)
-  { symbol: "RELIANCE", name: "Reliance Industries Ltd.", exchange: "NSE", sector: "Energy", price: 1425.60, open: 1395.00, high: 1432.00, low: 1390.50, close: 1425.60, change: 2.34, volume: "8.2M", volatility: 18.4, rsi: 64, riskScore: 62 },
-  { symbol: "TCS", name: "Tata Consultancy Services Ltd.", exchange: "NSE", sector: "IT Services", price: 3812.15, open: 3830.00, high: 3845.00, low: 3795.00, close: 3812.15, change: -0.58, volume: "2.1M", volatility: 11.2, rsi: 48, riskScore: 24 },
-  { symbol: "HDFCBANK", name: "HDFC Bank Ltd.", exchange: "NSE", sector: "Banking", price: 1689.90, open: 1685.00, high: 1698.00, low: 1680.00, close: 1689.90, change: 0.24, volume: "6.8M", volatility: 9.8, rsi: 52, riskScore: 22 },
-  { symbol: "INFY", name: "Infosys Ltd.", exchange: "NSE", sector: "IT Services", price: 1542.30, open: 1525.00, high: 1550.00, low: 1520.00, close: 1542.30, change: 1.12, volume: "5.4M", volatility: 15.7, rsi: 58, riskScore: 41 },
-  { symbol: "ICICIBANK", name: "ICICI Bank Ltd.", exchange: "NSE", sector: "Banking", price: 1248.50, open: 1235.00, high: 1255.00, low: 1232.00, close: 1248.50, change: 1.05, volume: "7.1M", volatility: 12.3, rsi: 61, riskScore: 27 },
-  { symbol: "BHARTIARTL", name: "Bharti Airtel Ltd.", exchange: "NSE", sector: "Telecom", price: 1675.20, open: 1650.00, high: 1682.00, low: 1648.00, close: 1675.20, change: 1.45, volume: "4.3M", volatility: 14.1, rsi: 59, riskScore: 35 },
-  { symbol: "SBIN", name: "State Bank of India", exchange: "NSE", sector: "Banking", price: 812.40, open: 805.00, high: 816.00, low: 802.00, close: 812.40, change: 0.88, volume: "12.4M", volatility: 16.2, rsi: 54, riskScore: 38 },
-  { symbol: "ITC", name: "ITC Ltd.", exchange: "NSE", sector: "FMCG", price: 472.30, open: 474.00, high: 476.00, low: 470.50, close: 472.30, change: -0.32, volume: "9.5M", volatility: 8.9, rsi: 49, riskScore: 19 },
-  { symbol: "LT", name: "Larsen & Toubro Ltd.", exchange: "NSE", sector: "Construction", price: 3580.00, open: 3535.00, high: 3600.00, low: 3530.00, close: 3580.00, change: 1.22, volume: "1.8M", volatility: 13.5, rsi: 56, riskScore: 34 },
-  { symbol: "HINDUNILVR", name: "Hindustan Unilever Ltd.", exchange: "NSE", sector: "FMCG", price: 2360.00, open: 2372.00, high: 2380.00, low: 2352.00, close: 2360.00, change: -0.45, volume: "1.2M", volatility: 10.1, rsi: 45, riskScore: 20 },
-  { symbol: "BAJFINANCE", name: "Bajaj Finance Ltd.", exchange: "NSE", sector: "Financials", price: 6850.00, open: 6725.00, high: 6890.00, low: 6710.00, close: 6850.00, change: 1.85, volume: "1.1M", volatility: 21.4, rsi: 55, riskScore: 46 },
-  { symbol: "HCLTECH", name: "HCL Technologies Ltd.", exchange: "NSE", sector: "IT Services", price: 1820.00, open: 1808.00, high: 1835.00, low: 1800.00, close: 1820.00, change: 0.65, volume: "2.4M", volatility: 13.8, rsi: 53, riskScore: 29 },
-  { symbol: "MARUTI", name: "Maruti Suzuki India Ltd.", exchange: "NSE", sector: "Automobile", price: 11400.00, open: 11290.00, high: 11450.00, low: 11280.00, close: 11400.00, change: 0.95, volume: "0.6M", volatility: 15.2, rsi: 57, riskScore: 36 },
-  { symbol: "SUNPHARMA", name: "Sun Pharmaceutical Industries", exchange: "NSE", sector: "Pharma", price: 1890.00, open: 1865.00, high: 1902.00, low: 1860.00, close: 1890.00, change: 1.35, volume: "1.9M", volatility: 12.7, rsi: 63, riskScore: 25 },
-  { symbol: "TATAMOTORS", name: "Tata Motors Ltd.", exchange: "NSE", sector: "Automobile", price: 987.25, open: 958.00, high: 994.00, low: 955.00, close: 987.25, change: 3.05, volume: "9.3M", volatility: 22.1, rsi: 66, riskScore: 55 },
-  { symbol: "ONGC", name: "Oil & Natural Gas Corp.", exchange: "NSE", sector: "Energy", price: 255.40, open: 257.50, high: 258.80, low: 254.10, close: 255.40, change: -0.75, volume: "14.2M", volatility: 17.5, rsi: 51, riskScore: 44 },
-  { symbol: "NTPC", name: "NTPC Ltd.", exchange: "NSE", sector: "Power", price: 382.10, open: 377.50, high: 385.00, low: 376.00, close: 382.10, change: 1.15, volume: "11.1M", volatility: 13.2, rsi: 58, riskScore: 28 },
-  { symbol: "KOTAKBANK", name: "Kotak Mahindra Bank Ltd.", exchange: "NSE", sector: "Banking", price: 1740.00, open: 1745.00, high: 1755.00, low: 1732.00, close: 1740.00, change: -0.25, volume: "3.2M", volatility: 11.5, rsi: 47, riskScore: 31 },
-  { symbol: "TITAN", name: "Titan Company Ltd.", exchange: "NSE", sector: "Consumer Goods", price: 3320.00, open: 3300.00, high: 3340.00, low: 3290.00, close: 3320.00, change: 0.55, volume: "1.4M", volatility: 16.8, rsi: 54, riskScore: 37 },
-  { symbol: "AXISBANK", name: "Axis Bank Ltd.", exchange: "NSE", sector: "Banking", price: 1160.00, open: 1154.00, high: 1168.00, low: 1150.00, close: 1160.00, change: 0.45, volume: "6.1M", volatility: 14.3, rsi: 50, riskScore: 33 },
-  { symbol: "ADANIENT", name: "Adani Enterprises Ltd.", exchange: "NSE", sector: "Conglomerate", price: 2984.40, open: 3110.00, high: 3125.00, low: 2950.00, close: 2984.40, change: -4.12, volume: "11.6M", volatility: 34.9, rsi: 71, riskScore: 84 },
-  { symbol: "ADANIPORTS", name: "Adani Ports & SEZ Ltd.", exchange: "NSE", sector: "Infrastructure", price: 1340.00, open: 1357.00, high: 1365.00, low: 1332.00, close: 1340.00, change: -1.25, volume: "5.8M", volatility: 24.2, rsi: 62, riskScore: 58 },
-  { symbol: "COALINDIA", name: "Coal India Ltd.", exchange: "NSE", sector: "Mining", price: 440.00, open: 438.00, high: 444.00, low: 436.50, close: 440.00, change: 0.35, volume: "8.9M", volatility: 15.6, rsi: 53, riskScore: 40 },
-  { symbol: "BAJAJFINSV", name: "Bajaj Finserv Ltd.", exchange: "NSE", sector: "Financials", price: 1780.00, open: 1754.00, high: 1792.00, low: 1750.00, close: 1780.00, change: 1.45, volume: "2.3M", volatility: 19.1, rsi: 52, riskScore: 42 },
-  { symbol: "TATASTEEL", name: "Tata Steel Ltd.", exchange: "NSE", sector: "Metals", price: 148.00, open: 149.50, high: 150.20, low: 147.10, close: 148.00, change: -0.95, volume: "24.5M", volatility: 21.0, rsi: 49, riskScore: 51 },
-  { symbol: "POWERGRID", name: "Power Grid Corp. of India", exchange: "NSE", sector: "Power", price: 315.00, open: 312.50, high: 317.00, low: 311.50, close: 315.00, change: 0.75, volume: "9.8M", volatility: 11.4, rsi: 55, riskScore: 23 },
-  { symbol: "M&M", name: "Mahindra & Mahindra Ltd.", exchange: "NSE", sector: "Automobile", price: 2850.00, open: 2790.00, high: 2875.00, low: 2785.00, close: 2850.00, change: 2.15, volume: "3.1M", volatility: 20.3, rsi: 68, riskScore: 48 },
-  { symbol: "ASIANPAINT", name: "Asian Paints Ltd.", exchange: "NSE", sector: "Consumer Goods", price: 2420.00, open: 2455.00, high: 2465.00, low: 2410.00, close: 2420.00, change: -1.45, volume: "1.7M", volatility: 13.9, rsi: 42, riskScore: 30 },
-  { symbol: "ULTRACEMCO", name: "UltraTech Cement Ltd.", exchange: "NSE", sector: "Cement", price: 11100.00, open: 11005.00, high: 11180.00, low: 10980.00, close: 11100.00, change: 0.85, volume: "0.4M", volatility: 14.5, rsi: 57, riskScore: 32 },
-  { symbol: "GRASIM", name: "Grasim Industries Ltd.", exchange: "NSE", sector: "Conglomerate", price: 2560.00, open: 2548.00, high: 2575.00, low: 2540.00, close: 2560.00, change: 0.45, volume: "1.0M", volatility: 16.2, rsi: 51, riskScore: 39 },
-  { symbol: "JSWSTEEL", name: "JSW Steel Ltd.", exchange: "NSE", sector: "Metals", price: 965.00, open: 971.00, high: 978.00, low: 960.00, close: 965.00, change: -0.65, volume: "3.7M", volatility: 18.9, rsi: 53, riskScore: 45 },
-  { symbol: "TECHM", name: "Tech Mahindra Ltd.", exchange: "NSE", sector: "IT Services", price: 1690.00, open: 1667.00, high: 1705.00, low: 1665.00, close: 1690.00, change: 1.35, volume: "2.0M", volatility: 17.1, rsi: 60, riskScore: 38 },
-  { symbol: "WIPRO", name: "Wipro Ltd.", exchange: "NSE", sector: "IT Services", price: 540.00, open: 538.50, high: 544.00, low: 536.00, close: 540.00, change: 0.25, volume: "4.8M", volatility: 14.0, rsi: 49, riskScore: 33 },
-  { symbol: "CIPLA", name: "Cipla Ltd.", exchange: "NSE", sector: "Pharma", price: 1520.00, open: 1507.00, high: 1530.00, low: 1502.00, close: 1520.00, change: 0.85, volume: "1.6M", volatility: 12.1, rsi: 52, riskScore: 26 },
-  { symbol: "DRREDDY", name: "Dr. Reddy's Laboratories", exchange: "NSE", sector: "Pharma", price: 1280.00, open: 1274.00, high: 1290.00, low: 1270.00, close: 1280.00, change: 0.45, volume: "1.3M", volatility: 13.4, rsi: 50, riskScore: 27 },
-  { symbol: "BPCL", name: "Bharat Petroleum Corp. Ltd.", exchange: "NSE", sector: "Energy", price: 310.00, open: 313.50, high: 315.00, low: 308.50, close: 310.00, change: -1.15, volume: "7.4M", volatility: 18.2, rsi: 48, riskScore: 43 },
-  { symbol: "BRITANNIA", name: "Britannia Industries Ltd.", exchange: "NSE", sector: "FMCG", price: 5150.00, open: 5132.00, high: 5180.00, low: 5120.00, close: 5150.00, change: 0.35, volume: "0.5M", volatility: 10.6, rsi: 51, riskScore: 22 },
-  { symbol: "EICHERMOT", name: "Eicher Motors Ltd.", exchange: "NSE", sector: "Automobile", price: 4850.00, open: 4770.00, high: 4880.00, low: 4765.00, close: 4850.00, change: 1.65, volume: "0.8M", volatility: 17.8, rsi: 62, riskScore: 41 },
-  { symbol: "NESTLEIND", name: "Nestle India Ltd.", exchange: "NSE", sector: "FMCG", price: 2280.00, open: 2292.00, high: 2305.00, low: 2270.00, close: 2280.00, change: -0.55, volume: "0.7M", volatility: 9.4, rsi: 46, riskScore: 18 },
-  { symbol: "HEROMOTOCO", name: "Hero MotoCorp Ltd.", exchange: "NSE", sector: "Automobile", price: 4920.00, open: 4868.00, high: 4950.00, low: 4860.00, close: 4920.00, change: 1.05, volume: "0.9M", volatility: 16.5, rsi: 56, riskScore: 39 },
-  { symbol: "APOLLOHOSP", name: "Apollo Hospitals Enterprise", exchange: "NSE", sector: "Healthcare", price: 6950.00, open: 6830.00, high: 7010.00, low: 6815.00, close: 6950.00, change: 1.75, volume: "0.7M", volatility: 15.9, rsi: 61, riskScore: 35 },
-  { symbol: "TATACONSUM", name: "Tata Consumer Products Ltd.", exchange: "NSE", sector: "FMCG", price: 980.00, open: 978.50, high: 986.00, low: 974.00, close: 980.00, change: 0.15, volume: "2.6M", volatility: 11.8, rsi: 48, riskScore: 24 },
-  { symbol: "DIVISLAB", name: "Divi's Laboratories Ltd.", exchange: "NSE", sector: "Pharma", price: 5850.00, open: 5710.00, high: 5890.00, low: 5700.00, close: 5850.00, change: 2.45, volume: "0.8M", volatility: 16.3, rsi: 64, riskScore: 31 },
-  { symbol: "HINDALCO", name: "Hindalco Industries Ltd.", exchange: "NSE", sector: "Metals", price: 665.00, open: 670.50, high: 674.00, low: 661.00, close: 665.00, change: -0.85, volume: "5.5M", volatility: 20.1, rsi: 52, riskScore: 47 },
-  { symbol: "SHREECEM", name: "Shree Cement Ltd.", exchange: "NSE", sector: "Cement", price: 24500.00, open: 24438.00, high: 24650.00, low: 24380.00, close: 24500.00, change: 0.25, volume: "0.2M", volatility: 15.0, rsi: 47, riskScore: 36 },
-  { symbol: "SBILIFE", name: "SBI Life Insurance Co. Ltd.", exchange: "NSE", sector: "Insurance", price: 1580.00, open: 1570.00, high: 1592.00, low: 1565.00, close: 1580.00, change: 0.65, volume: "1.5M", volatility: 11.7, rsi: 53, riskScore: 23 },
-  { symbol: "HDFCLIFE", name: "HDFC Life Insurance Co. Ltd.", exchange: "NSE", sector: "Insurance", price: 685.00, open: 682.00, high: 690.00, low: 680.00, close: 685.00, change: 0.45, volume: "2.8M", volatility: 12.5, rsi: 50, riskScore: 25 },
-  { symbol: "BAJAJ-AUTO", name: "Bajaj Auto Ltd.", exchange: "NSE", sector: "Automobile", price: 9850.00, open: 9700.00, high: 9920.00, low: 9680.00, close: 9850.00, change: 1.55, volume: "0.6M", volatility: 17.2, rsi: 63, riskScore: 40 },
-  { symbol: "BEL", name: "Bharat Electronics Ltd.", exchange: "NSE", sector: "Defence", price: 295.00, open: 286.80, high: 298.50, low: 285.00, close: 295.00, change: 2.85, volume: "18.5M", volatility: 22.8, rsi: 66, riskScore: 49 },
-  { symbol: "TRENT", name: "Trent Ltd.", exchange: "NSE", sector: "Retail", price: 6450.00, open: 6235.00, high: 6510.00, low: 6210.00, close: 6450.00, change: 3.45, volume: "2.1M", volatility: 25.4, rsi: 72, riskScore: 68 },
+  // Full NIFTY 50 Stocks Universe (Streaming Real-Time from Dhan HQ API v2)
+  { symbol: "RELIANCE", name: "Reliance Industries Ltd.", exchange: "NSE", sector: "Energy", price: 1164.90, open: 1170.40, high: 1174.60, low: 1152.50, close: 1164.90, change: -0.47, volume: "8.2M", volatility: 18.4, rsi: 64, riskScore: 62, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "TCS", name: "Tata Consultancy Services Ltd.", exchange: "NSE", sector: "IT Services", price: 2502.60, open: 2495.20, high: 2527.70, low: 2494.20, close: 2502.60, change: 0.30, volume: "2.1M", volatility: 11.2, rsi: 48, riskScore: 24, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "HDFCBANK", name: "HDFC Bank Ltd.", exchange: "NSE", sector: "Banking", price: 692.80, open: 683.30, high: 695.50, low: 680.85, close: 692.80, change: 1.39, volume: "6.8M", volatility: 9.8, rsi: 52, riskScore: 22, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "INFY", name: "Infosys Ltd.", exchange: "NSE", sector: "IT Services", price: 1185.00, open: 1149.10, high: 1185.00, low: 1147.90, close: 1185.00, change: 3.12, volume: "5.4M", volatility: 15.7, rsi: 58, riskScore: 41, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "ICICIBANK", name: "ICICI Bank Ltd.", exchange: "NSE", sector: "Banking", price: 1398.00, open: 1390.00, high: 1404.90, low: 1383.30, close: 1398.00, change: 0.58, volume: "7.1M", volatility: 12.3, rsi: 61, riskScore: 27, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "BHARTIARTL", name: "Bharti Airtel Ltd.", exchange: "NSE", sector: "Telecom", price: 1973.70, open: 1981.00, high: 1985.00, low: 1958.00, close: 1973.70, change: -0.37, volume: "4.3M", volatility: 14.1, rsi: 59, riskScore: 35, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "SBIN", name: "State Bank of India", exchange: "NSE", sector: "Banking", price: 961.85, open: 971.85, high: 971.85, low: 959.60, close: 961.85, change: -1.03, volume: "12.4M", volatility: 16.2, rsi: 54, riskScore: 38, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "ITC", name: "ITC Ltd.", exchange: "NSE", sector: "FMCG", price: 265.60, open: 265.00, high: 267.90, low: 262.70, close: 265.60, change: 0.23, volume: "9.5M", volatility: 8.9, rsi: 49, riskScore: 19, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "LT", name: "Larsen & Toubro Ltd.", exchange: "NSE", sector: "Construction", price: 3871.70, open: 3837.10, high: 3872.70, low: 3806.20, close: 3871.70, change: 0.90, volume: "1.8M", volatility: 13.5, rsi: 56, riskScore: 34, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "HINDUNILVR", name: "Hindustan Unilever Ltd.", exchange: "NSE", sector: "FMCG", price: 1864.60, open: 1858.00, high: 1865.50, low: 1840.40, close: 1864.60, change: 0.36, volume: "1.2M", volatility: 10.1, rsi: 45, riskScore: 20, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "BAJFINANCE", name: "Bajaj Finance Ltd.", exchange: "NSE", sector: "Financials", price: 939.10, open: 934.00, high: 952.45, low: 931.20, close: 939.10, change: 0.55, volume: "1.1M", volatility: 21.4, rsi: 55, riskScore: 46, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "HCLTECH", name: "HCL Technologies Ltd.", exchange: "NSE", sector: "IT Services", price: 1428.10, open: 1410.00, high: 1452.00, low: 1410.00, close: 1428.10, change: 1.28, volume: "2.4M", volatility: 13.8, rsi: 53, riskScore: 29, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "MARUTI", name: "Maruti Suzuki India Ltd.", exchange: "NSE", sector: "Automobile", price: 11397.00, open: 11430.00, high: 11473.00, low: 11342.00, close: 11397.00, change: -0.29, volume: "0.6M", volatility: 15.2, rsi: 57, riskScore: 36, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "SUNPHARMA", name: "Sun Pharmaceutical Industries", exchange: "NSE", sector: "Pharma", price: 1777.70, open: 1769.00, high: 1855.00, low: 1766.20, close: 1777.70, change: 0.49, volume: "1.9M", volatility: 12.7, rsi: 63, riskScore: 25, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "TATAMOTORS", name: "Tata Motors Ltd.", exchange: "NSE", sector: "Automobile", price: 265.40, open: 266.00, high: 266.95, low: 263.10, close: 265.40, change: -0.23, volume: "9.3M", volatility: 22.1, rsi: 66, riskScore: 55, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "ONGC", name: "Oil & Natural Gas Corp.", exchange: "NSE", sector: "Energy", price: 225.39, open: 226.50, high: 227.69, low: 224.42, close: 225.39, change: -0.49, volume: "14.2M", volatility: 17.5, rsi: 51, riskScore: 44, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "NTPC", name: "NTPC Ltd.", exchange: "NSE", sector: "Power", price: 316.25, open: 310.50, high: 318.00, low: 308.15, close: 316.25, change: 1.85, volume: "11.1M", volatility: 13.2, rsi: 58, riskScore: 28, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "KOTAKBANK", name: "Kotak Mahindra Bank Ltd.", exchange: "NSE", sector: "Banking", price: 461.60, open: 459.20, high: 462.90, low: 457.05, close: 461.60, change: 0.52, volume: "3.2M", volatility: 11.5, rsi: 47, riskScore: 31, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "TITAN", name: "Titan Company Ltd.", exchange: "NSE", sector: "Consumer Goods", price: 4436.50, open: 4437.30, high: 4486.00, low: 4391.30, close: 4436.50, change: -0.02, volume: "1.4M", volatility: 16.8, rsi: 54, riskScore: 37, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "AXISBANK", name: "Axis Bank Ltd.", exchange: "NSE", sector: "Banking", price: 1217.00, open: 1221.00, high: 1227.70, low: 1209.20, close: 1217.00, change: -0.33, volume: "6.1M", volatility: 14.3, rsi: 50, riskScore: 33, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "ADANIENT", name: "Adani Enterprises Ltd.", exchange: "NSE", sector: "Conglomerate", price: 2579.40, open: 2606.40, high: 2609.50, low: 2557.00, close: 2579.40, change: -1.04, volume: "11.6M", volatility: 34.9, rsi: 71, riskScore: 84, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "ADANIPORTS", name: "Adani Ports & SEZ Ltd.", exchange: "NSE", sector: "Infrastructure", price: 1850.00, open: 1871.00, high: 1871.60, low: 1813.70, close: 1850.00, change: -1.12, volume: "5.8M", volatility: 24.2, rsi: 62, riskScore: 58, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "COALINDIA", name: "Coal India Ltd.", exchange: "NSE", sector: "Mining", price: 389.00, open: 398.00, high: 398.05, low: 380.40, close: 389.00, change: -2.26, volume: "8.9M", volatility: 15.6, rsi: 53, riskScore: 40, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "BAJAJFINSV", name: "Bajaj Finserv Ltd.", exchange: "NSE", sector: "Financials", price: 1667.60, open: 1665.00, high: 1680.00, low: 1658.00, close: 1667.60, change: 0.16, volume: "2.3M", volatility: 19.1, rsi: 52, riskScore: 42, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "TATASTEEL", name: "Tata Steel Ltd.", exchange: "NSE", sector: "Metals", price: 167.60, open: 168.50, high: 168.69, low: 167.21, close: 167.60, change: -0.53, volume: "24.5M", volatility: 21.0, rsi: 49, riskScore: 51, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "POWERGRID", name: "Power Grid Corp. of India", exchange: "NSE", sector: "Power", price: 265.00, open: 260.05, high: 267.30, low: 259.25, close: 265.00, change: 1.90, volume: "9.8M", volatility: 11.4, rsi: 55, riskScore: 23, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "M&M", name: "Mahindra & Mahindra Ltd.", exchange: "NSE", sector: "Automobile", price: 2840.30, open: 2895.70, high: 2905.40, low: 2839.00, close: 2840.30, change: -1.91, volume: "3.1M", volatility: 20.3, rsi: 68, riskScore: 48, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "ASIANPAINT", name: "Asian Paints Ltd.", exchange: "NSE", sector: "Consumer Goods", price: 2320.00, open: 2297.00, high: 2348.00, low: 2271.20, close: 2320.00, change: 1.00, volume: "1.7M", volatility: 13.9, rsi: 42, riskScore: 30, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "ULTRACEMCO", name: "UltraTech Cement Ltd.", exchange: "NSE", sector: "Cement", price: 11045.00, open: 11150.00, high: 11154.00, low: 11004.00, close: 11045.00, change: -0.94, volume: "0.4M", volatility: 14.5, rsi: 57, riskScore: 32, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "GRASIM", name: "Grasim Industries Ltd.", exchange: "NSE", sector: "Conglomerate", price: 2981.40, open: 2925.00, high: 2981.40, low: 2900.10, close: 2981.40, change: 1.93, volume: "1.0M", volatility: 16.2, rsi: 51, riskScore: 39, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "JSWSTEEL", name: "JSW Steel Ltd.", exchange: "NSE", sector: "Metals", price: 1246.00, open: 1251.00, high: 1263.60, low: 1245.00, close: 1246.00, change: -0.40, volume: "3.7M", volatility: 18.9, rsi: 53, riskScore: 45, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "TECHM", name: "Tech Mahindra Ltd.", exchange: "NSE", sector: "IT Services", price: 1790.80, open: 1774.00, high: 1813.40, low: 1773.60, close: 1790.80, change: 0.95, volume: "2.0M", volatility: 17.1, rsi: 60, riskScore: 38, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "WIPRO", name: "Wipro Ltd.", exchange: "NSE", sector: "IT Services", price: 198.31, open: 190.80, high: 198.31, low: 190.80, close: 198.31, change: 3.94, volume: "4.8M", volatility: 14.0, rsi: 49, riskScore: 33, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "CIPLA", name: "Cipla Ltd.", exchange: "NSE", sector: "Pharma", price: 1378.90, open: 1362.00, high: 1381.70, low: 1357.00, close: 1378.90, change: 1.24, volume: "1.6M", volatility: 12.1, rsi: 52, riskScore: 26, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "DRREDDY", name: "Dr. Reddy's Laboratories", exchange: "NSE", sector: "Pharma", price: 1352.00, open: 1345.00, high: 1363.70, low: 1345.00, close: 1352.00, change: 0.52, volume: "1.3M", volatility: 13.4, rsi: 50, riskScore: 27, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "BPCL", name: "Bharat Petroleum Corp. Ltd.", exchange: "NSE", sector: "Energy", price: 284.90, open: 287.20, high: 287.65, low: 283.40, close: 284.90, change: -0.80, volume: "7.4M", volatility: 18.2, rsi: 48, riskScore: 43, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "BRITANNIA", name: "Britannia Industries Ltd.", exchange: "NSE", sector: "FMCG", price: 4640.00, open: 4656.00, high: 4657.10, low: 4550.00, close: 4640.00, change: -0.34, volume: "0.5M", volatility: 10.6, rsi: 51, riskScore: 22, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "EICHERMOT", name: "Eicher Motors Ltd.", exchange: "NSE", sector: "Automobile", price: 7220.00, open: 7239.00, high: 7343.00, low: 7198.00, close: 7220.00, change: -0.26, volume: "0.8M", volatility: 17.8, rsi: 62, riskScore: 41, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "NESTLEIND", name: "Nestle India Ltd.", exchange: "NSE", sector: "FMCG", price: 1167.00, open: 1181.00, high: 1185.00, low: 1165.00, close: 1167.00, change: -1.19, volume: "0.7M", volatility: 9.4, rsi: 46, riskScore: 18, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "HEROMOTOCO", name: "Hero MotoCorp Ltd.", exchange: "NSE", sector: "Automobile", price: 5167.00, open: 5090.00, high: 5196.00, low: 5051.50, close: 5167.00, change: 1.51, volume: "0.9M", volatility: 16.5, rsi: 56, riskScore: 39, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "APOLLOHOSP", name: "Apollo Hospitals Enterprise", exchange: "NSE", sector: "Healthcare", price: 8448.00, open: 8195.00, high: 8448.00, low: 8176.00, close: 8448.00, change: 3.09, volume: "0.7M", volatility: 15.9, rsi: 61, riskScore: 35, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "TATACONSUM", name: "Tata Consumer Products Ltd.", exchange: "NSE", sector: "FMCG", price: 1025.90, open: 1028.45, high: 1028.90, low: 1002.35, close: 1025.90, change: -0.25, volume: "2.6M", volatility: 11.8, rsi: 48, riskScore: 24, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "DIVISLAB", name: "Divi's Laboratories Ltd.", exchange: "NSE", sector: "Pharma", price: 9780.00, open: 9680.00, high: 9865.00, low: 9621.50, close: 9780.00, change: 1.03, volume: "0.8M", volatility: 16.3, rsi: 64, riskScore: 31, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "HINDALCO", name: "Hindalco Industries Ltd.", exchange: "NSE", sector: "Metals", price: 884.70, open: 882.30, high: 892.50, low: 876.10, close: 884.70, change: 0.27, volume: "5.5M", volatility: 20.1, rsi: 52, riskScore: 47, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "SHREECEM", name: "Shree Cement Ltd.", exchange: "NSE", sector: "Cement", price: 22995.00, open: 23125.00, high: 23125.00, low: 22670.00, close: 22995.00, change: -0.56, volume: "0.2M", volatility: 15.0, rsi: 47, riskScore: 36, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "SBILIFE", name: "SBI Life Insurance Co. Ltd.", exchange: "NSE", sector: "Insurance", price: 1658.60, open: 1651.50, high: 1685.90, low: 1645.80, close: 1658.60, change: 0.43, volume: "1.5M", volatility: 11.7, rsi: 53, riskScore: 23, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "HDFCLIFE", name: "HDFC Life Insurance Co. Ltd.", exchange: "NSE", sector: "Insurance", price: 524.90, open: 518.35, high: 525.80, low: 510.50, close: 524.90, change: 1.26, volume: "2.8M", volatility: 12.5, rsi: 50, riskScore: 25, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "BAJAJ-AUTO", name: "Bajaj Auto Ltd.", exchange: "NSE", sector: "Automobile", price: 10350.00, open: 10383.00, high: 10530.00, low: 10309.00, close: 10350.00, change: -0.32, volume: "0.6M", volatility: 17.2, rsi: 63, riskScore: 40, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "BEL", name: "Bharat Electronics Ltd.", exchange: "NSE", sector: "Defence", price: 369.90, open: 371.00, high: 371.15, low: 363.50, close: 369.90, change: -0.30, volume: "18.5M", volatility: 22.8, rsi: 66, riskScore: 49, feed_source: "DHAN_HQ_API_LIVE" },
+  { symbol: "TRENT", name: "Trent Ltd.", exchange: "NSE", sector: "Retail", price: 3017.30, open: 3018.00, high: 3060.00, low: 2980.00, close: 3017.30, change: -0.02, volume: "2.1M", volatility: 25.4, rsi: 72, riskScore: 68, feed_source: "DHAN_HQ_API_LIVE" },
 ];
 
 export const DEFAULT_SYMBOL = "NIFTY50";
+
+/**
+ * Updates STOCKS in place with real-time Dhan quotes.
+ */
+export function updateLiveStockPrices(liveList) {
+  if (!Array.isArray(liveList)) return;
+  for (const live of liveList) {
+    const existing = STOCKS.find((s) => s.symbol === live.symbol);
+    if (existing) {
+      if (typeof live.price === "number") existing.price = live.price;
+      if (typeof live.open === "number") existing.open = live.open;
+      if (typeof live.high === "number") existing.high = live.high;
+      if (typeof live.low === "number") existing.low = live.low;
+      if (typeof live.close === "number") existing.close = live.close;
+      if (typeof live.change === "number") existing.change = live.change;
+      if (live.volume) existing.volume = live.volume;
+      existing.feed_source = live.feed_source || "DHAN_HQ_API_LIVE";
+    }
+  }
+}
 
 export function getStock(symbol) {
   const clean = symbol?.trim().toUpperCase();

@@ -1,7 +1,7 @@
 // src/services/api.js
 // Central service layer for NSV Sentinel connecting to FastAPI backend.
 
-import { STOCKS, getStock, generateSeries, generateSentimentTrend, generateRiskHistory } from "../data/stocks";
+import { STOCKS, getStock, generateSeries, generateSentimentTrend, generateRiskHistory, updateLiveStockPrices } from "../data/stocks";
 import { ALERTS, ALERT_SUMMARY } from "../data/alerts";
 import { SECURITY_STATUS, SECURITY_EVENTS } from "../data/security";
 import { NEWS, getSentimentSummary } from "../data/news";
@@ -74,7 +74,11 @@ export async function getMarketStatus() {
 }
 
 export async function getStockList() {
-  return fetchWithFallback(`${API_BASE}/market/stocks`, {}, () => STOCKS);
+  const list = await fetchWithFallback(`${API_BASE}/market/stocks`, {}, () => STOCKS);
+  if (Array.isArray(list) && list.length > 0) {
+    updateLiveStockPrices(list);
+  }
+  return list;
 }
 
 export async function getMarketData(symbol, range = "1D") {

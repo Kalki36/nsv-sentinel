@@ -1,13 +1,21 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, TrendingUp, Layers } from "lucide-react";
 import { STOCKS } from "../data/stocks";
+import { getStockList } from "../services/api";
 import { useNavigate } from "react-router-dom";
 
 export default function StockSearch({ compact = false, onSelect = null, placeholder = "Search NIFTY 50 stock or index (e.g. RELIANCE, NIFTY50, SENSEX)..." }) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [stockList, setStockList] = useState(STOCKS);
   const ref = useRef(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getStockList().then((list) => {
+      if (list && list.length > 0) setStockList(list);
+    });
+  }, []);
 
   useEffect(() => {
     function onClick(e) {
@@ -18,13 +26,13 @@ export default function StockSearch({ compact = false, onSelect = null, placehol
   }, []);
 
   const filtered = query.trim()
-    ? STOCKS.filter(
+    ? stockList.filter(
         (s) =>
           s.symbol.toLowerCase().includes(query.toLowerCase()) ||
           s.name.toLowerCase().includes(query.toLowerCase()) ||
           (s.sector && s.sector.toLowerCase().includes(query.toLowerCase()))
       )
-    : STOCKS;
+    : stockList;
 
   const indices = filtered.filter((s) => s.sector === "Index");
   const equities = filtered.filter((s) => s.sector !== "Index");
