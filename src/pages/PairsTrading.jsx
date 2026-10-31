@@ -20,7 +20,6 @@ import {
   CheckCircle2,
   AlertTriangle,
   RefreshCw,
-  BarChart2,
   Info,
   Lock
 } from "lucide-react";
@@ -91,8 +90,7 @@ export default function PairsTrading() {
     performance,
     decision,
     data_integrity_hash,
-    series,
-    trades
+    series
   } = data;
 
   return (
@@ -540,58 +538,6 @@ export default function PairsTrading() {
             )}
           </div>
         </div>
-      </div>
-
-      {/* Trades Log Table */}
-      <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-xs">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <BarChart2 className="h-4 w-4 text-red-600" />
-            <h3 className="text-xs font-bold text-gray-800 uppercase tracking-wider">
-              Executed Pairs Trading Log ({trades.length} Trades)
-            </h3>
-          </div>
-          <span className="text-xs text-gray-500 font-medium">Transaction Cost: {(config.transaction_cost * 100).toFixed(2)}% per leg</span>
-        </div>
-
-        {trades.length === 0 ? (
-          <p className="text-xs text-gray-500 py-6 text-center">No trades triggered during selected backtest parameters.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs font-mono">
-              <thead className="bg-gray-50 text-[11px] font-bold text-gray-500 uppercase border-b border-gray-200">
-                <tr>
-                  <th className="px-3 py-2.5">Entry Time</th>
-                  <th className="px-3 py-2.5">Exit Time</th>
-                  <th className="px-3 py-2.5">Side</th>
-                  <th className="px-3 py-2.5">Entry Spread</th>
-                  <th className="px-3 py-2.5">Exit Spread</th>
-                  <th className="px-3 py-2.5">Net PnL (₹)</th>
-                  <th className="px-3 py-2.5">Exit Reason</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {trades.map((t, idx) => (
-                  <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-3 py-2 text-gray-700">{t["Entry Time"]}</td>
-                    <td className="px-3 py-2 text-gray-700">{t["Exit Time"]}</td>
-                    <td className="px-3 py-2 font-bold">
-                      <span className={`inline-block px-2 py-0.5 rounded text-[10px] ${t.Side === 'LONG SPREAD' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
-                        {t.Side}
-                      </span>
-                    </td>
-                    <td className="px-3 py-2 text-gray-900">{t["Entry Spread"]}</td>
-                    <td className="px-3 py-2 text-gray-900">{t["Exit Spread"]}</td>
-                    <td className={`px-3 py-2 font-bold ${t.PnL >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                      {t.PnL > 0 ? "+" : ""}{t.PnL.toLocaleString('en-IN')}
-                    </td>
-                    <td className="px-3 py-2 text-gray-500 text-[11px] font-sans">{t["Exit Reason"]}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
       </div>
     </div>
   );
