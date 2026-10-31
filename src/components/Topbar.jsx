@@ -40,9 +40,9 @@ export default function Topbar() {
   }, []);
 
   const notifications = [
-    { id: 1, title: "Surveillance Alert Flagged", time: "10:41 AM", desc: "RELIANCE volume spike +383% above baseline." },
-    { id: 2, title: "Security Integrity Check", time: "10:37 AM", desc: "SHA-256 data record signatures verified." },
-    { id: 3, title: "FinBERT Model Update", time: "09:42 AM", desc: "Processed 7 financial news articles." }
+    { id: 1, title: "Surveillance Alert Flagged", time: "10:24 AM", desc: "RELIANCE volume spike +383% above baseline." },
+    { id: 2, title: "Security Integrity Check", time: "10:18 AM", desc: "SHA-256 data record signatures verified." },
+    { id: 3, title: "FinBERT Model Update", time: "09:38 AM", desc: "Processed 7 financial news articles." }
   ];
 
   return (

@@ -18,7 +18,7 @@ def get_dashboard_overview(current_user: dict = Depends(get_current_user)):
             "anomalyScore": 0.91,
             "risk": "High",
             "status": "Alert",
-            "detectedAt": "10:41:58",
+            "detectedAt": "10:24:58",
             "detail": {
                 "type": "Unusual Trading Activity",
                 "historicalVolume": "1.2M",

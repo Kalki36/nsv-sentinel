@@ -8,6 +8,7 @@ export const AI_DECISIONS = {
     recommendation: "BUY",
     confidence: 84,
     factors: [
+      { label: "Pairs Arbitrage Factor", value: 28, tone: "buy" },
       { label: "Market Trend", value: 24, tone: "buy" },
       { label: "Positive Sentiment", value: 18, tone: "buy" },
       { label: "Volume Trend", value: 12, tone: "buy" },
@@ -15,12 +16,13 @@ export const AI_DECISIONS = {
       { label: "Risk Score", value: -6, tone: "sell" },
     ],
     summary:
-      "The current recommendation is primarily influenced by positive market momentum and financial sentiment, while elevated volatility reduces confidence.",
+      "The current recommendation is primarily influenced by statistical pairs arbitrage mean-reversion, positive market momentum, and financial sentiment, while elevated volatility reduces confidence.",
   },
   TCS: {
     recommendation: "HOLD",
     confidence: 58,
     factors: [
+      { label: "Pairs Arbitrage Factor", value: -12, tone: "sell" },
       { label: "Market Trend", value: 4, tone: "buy" },
       { label: "Positive Sentiment", value: 9, tone: "buy" },
       { label: "Volume Trend", value: -3, tone: "sell" },
@@ -28,12 +30,13 @@ export const AI_DECISIONS = {
       { label: "Risk Score", value: -5, tone: "sell" },
     ],
     summary:
-      "Signals are mixed: modest positive sentiment is offset by soft volume trends, leaving confidence too low for a directional call.",
+      "Signals are mixed: modest positive sentiment is offset by soft volume trends and pairs divergence, leaving confidence too low for a directional call.",
   },
   INFY: {
     recommendation: "HOLD",
     confidence: 55,
     factors: [
+      { label: "Pairs Arbitrage Factor", value: 15, tone: "buy" },
       { label: "Market Trend", value: 6, tone: "buy" },
       { label: "Positive Sentiment", value: 5, tone: "buy" },
       { label: "Volume Trend", value: 7, tone: "buy" },
@@ -41,12 +44,13 @@ export const AI_DECISIONS = {
       { label: "Risk Score", value: -11, tone: "sell" },
     ],
     summary:
-      "Moderate anomaly activity and risk score elevation offset otherwise stable trend and sentiment signals.",
+      "Moderate anomaly activity and risk score elevation offset otherwise stable trend, pairs arbitrage, and sentiment signals.",
   },
   HDFCBANK: {
     recommendation: "BUY",
     confidence: 76,
     factors: [
+      { label: "Pairs Arbitrage Factor", value: 22, tone: "buy" },
       { label: "Market Trend", value: 14, tone: "buy" },
       { label: "Positive Sentiment", value: 6, tone: "buy" },
       { label: "Volume Trend", value: 9, tone: "buy" },
@@ -54,12 +58,13 @@ export const AI_DECISIONS = {
       { label: "Risk Score", value: -2, tone: "sell" },
     ],
     summary:
-      "Stable margins and low volatility support a constructive view, with limited downside factors weighing on confidence.",
+      "Pairs mean-reversion drift, stable margins, and low volatility support a constructive view, with limited downside factors weighing on confidence.",
   },
   ADANIENT: {
     recommendation: "SELL",
     confidence: 71,
     factors: [
+      { label: "Pairs Arbitrage Factor", value: -26, tone: "sell" },
       { label: "Negative Sentiment", value: -22, tone: "sell" },
       { label: "Volatility Spike", value: -19, tone: "sell" },
       { label: "Manipulation Risk", value: -15, tone: "sell" },
@@ -67,12 +72,13 @@ export const AI_DECISIONS = {
       { label: "Volume Trend", value: 4, tone: "buy" },
     ],
     summary:
-      "Elevated volatility, regulatory-linked negative sentiment, and surveillance risk flags dominate the signal, driving a cautious recommendation.",
+      "Elevated volatility, negative pairs spread divergence, regulatory-linked negative sentiment, and surveillance risk flags dominate the signal, driving a cautious recommendation.",
   },
   TATAMOTORS: {
     recommendation: "BUY",
     confidence: 68,
     factors: [
+      { label: "Pairs Arbitrage Factor", value: 19, tone: "buy" },
       { label: "Positive Sentiment", value: 15, tone: "buy" },
       { label: "Market Trend", value: 11, tone: "buy" },
       { label: "Volume Trend", value: 8, tone: "buy" },
@@ -80,7 +86,7 @@ export const AI_DECISIONS = {
       { label: "Risk Score", value: -7, tone: "sell" },
     ],
     summary:
-      "Strong seasonal demand signals and positive sentiment outweigh moderate volatility, supporting an upward lean.",
+      "Strong seasonal demand signals, positive sentiment, and pairs arbitrage mean-reversion outweigh moderate volatility, supporting an upward lean.",
   },
 };
 
@@ -102,14 +108,14 @@ export function getRisk(symbol) {
 }
 
 export const AUDIT_LOGS = [
-  { id: "A-901", timestamp: "10:42:31", actor: "System", event: "Data received", module: "Ingestion", status: "Success" },
-  { id: "A-902", timestamp: "10:42:32", actor: "System", event: "Integrity validated", module: "Security", status: "Success" },
-  { id: "A-903", timestamp: "10:42:33", actor: "System", event: "Data preprocessing completed", module: "Analytics", status: "Success" },
-  { id: "A-904", timestamp: "10:42:34", actor: "System", event: "AI analysis completed", module: "AI Engine", status: "Success" },
-  { id: "A-905", timestamp: "10:42:35", actor: "System", event: "Recommendation generated", module: "Decision Engine", status: "Success" },
-  { id: "A-906", timestamp: "10:38:02", actor: "analyst.n", event: "Alert NSV-1042 reviewed", module: "Surveillance", status: "Success" },
-  { id: "A-907", timestamp: "10:31:02", actor: "System", event: "Input anomaly quarantined", module: "Security", status: "Warning" },
+  { id: "A-901", timestamp: "10:28:45", actor: "System", event: "Data received", module: "Ingestion", status: "Success" },
+  { id: "A-902", timestamp: "10:28:46", actor: "System", event: "Integrity validated", module: "Security", status: "Success" },
+  { id: "A-903", timestamp: "10:28:47", actor: "System", event: "Data preprocessing completed", module: "Analytics", status: "Success" },
+  { id: "A-904", timestamp: "10:28:48", actor: "System", event: "AI analysis completed", module: "AI Engine", status: "Success" },
+  { id: "A-905", timestamp: "10:28:49", actor: "System", event: "Recommendation generated", module: "Decision Engine", status: "Success" },
+  { id: "A-906", timestamp: "10:25:02", actor: "analyst.n", event: "Alert NSV-1042 reviewed", module: "Surveillance", status: "Success" },
+  { id: "A-907", timestamp: "10:21:02", actor: "System", event: "Input anomaly quarantined", module: "Security", status: "Warning" },
   { id: "A-908", timestamp: "10:15:47", actor: "analyst.s", event: "Session login", module: "Auth", status: "Success" },
-  { id: "A-909", timestamp: "09:58:20", actor: "System", event: "Malformed payload rejected", module: "Security", status: "Error" },
-  { id: "A-910", timestamp: "09:42:35", actor: "System", event: "Sentiment batch processed", module: "AI Engine", status: "Success" },
+  { id: "A-909", timestamp: "09:54:20", actor: "System", event: "Malformed payload rejected", module: "Security", status: "Error" },
+  { id: "A-910", timestamp: "09:38:35", actor: "System", event: "Sentiment batch processed", module: "AI Engine", status: "Success" },
 ];

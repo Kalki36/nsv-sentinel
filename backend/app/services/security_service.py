@@ -71,27 +71,27 @@ def get_security_status_overview(mode: str = "secure") -> Dict[str, Any]:
     }
 
 SECURITY_EVENTS_DATA = [
-    {"id": "SEC-501", "time": "10:41:12", "event": "Data validation", "severity": "Low", "action": "Passed", "status": "Verified"},
-    {"id": "SEC-500", "time": "10:37:45", "event": "API request", "severity": "Normal", "action": "Allowed", "status": "Verified"},
-    {"id": "SEC-499", "time": "10:31:02", "event": "Input anomaly", "severity": "Medium", "action": "Quarantined", "status": "Contained"},
-    {"id": "SEC-498", "time": "10:24:37", "event": "Source signature check", "severity": "Low", "action": "Passed", "status": "Verified"},
-    {"id": "SEC-497", "time": "10:12:55", "event": "Session token refresh", "severity": "Normal", "action": "Allowed", "status": "Verified"},
-    {"id": "SEC-496", "time": "09:58:20", "event": "Malformed payload", "severity": "High", "action": "Rejected", "status": "Contained"},
-    {"id": "SEC-495", "time": "09:42:08", "event": "Rate limit check", "severity": "Low", "action": "Allowed", "status": "Verified"},
+    {"id": "SEC-501", "time": "10:28:15", "event": "Data validation", "severity": "Low", "action": "Passed", "status": "Verified"},
+    {"id": "SEC-500", "time": "10:25:40", "event": "API request", "severity": "Normal", "action": "Allowed", "status": "Verified"},
+    {"id": "SEC-499", "time": "10:21:02", "event": "Input anomaly", "severity": "Medium", "action": "Quarantined", "status": "Contained"},
+    {"id": "SEC-498", "time": "10:14:37", "event": "Source signature check", "severity": "Low", "action": "Passed", "status": "Verified"},
+    {"id": "SEC-497", "time": "10:05:55", "event": "Session token refresh", "severity": "Normal", "action": "Allowed", "status": "Verified"},
+    {"id": "SEC-496", "time": "09:54:20", "event": "Malformed payload", "severity": "High", "action": "Rejected", "status": "Contained"},
+    {"id": "SEC-495", "time": "09:38:08", "event": "Rate limit check", "severity": "Low", "action": "Allowed", "status": "Verified"},
     {"id": "SEC-494", "time": "09:15:31", "event": "Encrypted channel handshake", "severity": "Normal", "action": "Passed", "status": "Verified"},
 ]
 
 AUDIT_LOGS_DATA = [
-    {"id": "A-901", "timestamp": "10:42:31", "actor": "System", "event": "Data received", "module": "Ingestion", "status": "Success"},
-    {"id": "A-902", "timestamp": "10:42:32", "actor": "System", "event": "Integrity validated", "module": "Security", "status": "Success"},
-    {"id": "A-903", "timestamp": "10:42:33", "actor": "System", "event": "Data preprocessing completed", "module": "Analytics", "status": "Success"},
-    {"id": "A-904", "timestamp": "10:42:34", "actor": "System", "event": "AI analysis completed", "module": "AI Engine", "status": "Success"},
-    {"id": "A-905", "timestamp": "10:42:35", "actor": "System", "event": "Recommendation generated", "module": "Decision Engine", "status": "Success"},
-    {"id": "A-906", "timestamp": "10:38:02", "actor": "analyst.n", "event": "Alert NSV-1042 reviewed", "module": "Surveillance", "status": "Success"},
-    {"id": "A-907", "timestamp": "10:31:02", "actor": "System", "event": "Input anomaly quarantined", "module": "Security", "status": "Warning"},
-    {"id": "A-908", "timestamp": "10:15:47", "actor": "analyst.s", "event": "Session login", "module": "Auth", "status": "Success"},
-    {"id": "A-909", "timestamp": "09:58:20", "actor": "System", "event": "Malformed payload rejected", "module": "Security", "status": "Error"},
-    {"id": "A-910", "timestamp": "09:42:35", "actor": "System", "event": "Sentiment batch processed", "module": "AI Engine", "status": "Success"},
+    {"id": "A-901", "timestamp": "10:28:45", "actor": "System", "event": "Data received", "module": "Ingestion", "status": "Success"},
+    {"id": "A-902", "timestamp": "10:28:46", "actor": "System", "event": "Integrity validated", "module": "Security", "status": "Success"},
+    {"id": "A-903", "timestamp": "10:28:47", "actor": "System", "event": "Data preprocessing completed", "module": "Analytics", "status": "Success"},
+    {"id": "A-904", "timestamp": "10:28:48", "actor": "System", "event": "AI analysis completed", "module": "AI Engine", "status": "Success"},
+    {"id": "A-905", "timestamp": "10:28:49", "actor": "System", "event": "Recommendation generated", "module": "Decision Engine", "status": "Success"},
+    {"id": "A-906", "timestamp": "10:24:02", "actor": "analyst.n", "event": "Alert NSV-1042 reviewed", "module": "Surveillance", "status": "Success"},
+    {"id": "A-907", "timestamp": "10:21:02", "actor": "System", "event": "Input anomaly quarantined", "module": "Security", "status": "Warning"},
+    {"id": "A-908", "timestamp": "10:12:47", "actor": "analyst.s", "event": "Session login", "module": "Auth", "status": "Success"},
+    {"id": "A-909", "timestamp": "09:54:20", "actor": "System", "event": "Malformed payload rejected", "module": "Security", "status": "Error"},
+    {"id": "A-910", "timestamp": "09:38:35", "actor": "System", "event": "Sentiment batch processed", "module": "AI Engine", "status": "Success"},
 ]
 
 def get_security_events_list() -> List[Dict[str, Any]]:
